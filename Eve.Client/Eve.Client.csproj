@@ -5,7 +5,7 @@
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D0E09787-FEC9-4A6B-92D4-78DB328E749D}</ProjectGuid>
+    <ProjectGuid>{7758DBBE-03EC-456C-B1E4-85586ED7D4AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Eve</RootNamespace>
