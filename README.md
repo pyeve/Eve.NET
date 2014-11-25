@@ -65,7 +65,6 @@ var client = new EveClient {
 // Set target resouce for subsequent requests.
 client.ResourceName = "companies";
 ````
-
 ### GET at Resource Endpoints
 ```C#
 // List<T>
@@ -103,6 +102,19 @@ var company = await client.GetAsync<Company>("companies", companyId, eTag);
 
 // HttpStatusCode is still 'NotModified'.
 Assert.AreEqual(HttpStatusCode.NotModified, client.HttpResponse.StatusCode);
+```
+### Raw GET Requests
+```C#
+// You can use this method to perform parametrized queries.
+var query = @"companies?where={""n"": ""MyCompany""}";
+// GetAsync will return a HttpResponseMessage which you can freely inspect.
+var response = await client.GetAsyc(query);
+
+Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+Assert.AreEqual("application/json", result.Content.Headers.ContentType.ToString())
+
+// Please note that you also get the HttpResponseMessage object with GetAsync<T> requests, 
+// exposed by the HttpResponse property.
 ```
 ### POST/Create Requests
 ```C#
