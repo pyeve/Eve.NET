@@ -1,21 +1,23 @@
 Eve.NET
 =======
-Eve.NET is a simple cross platform .NET client for Web Services powered by the
-[Eve REST API framework][1]. It leverages both [`System.Net.HttpClient`][5] and 
+Eve.NET is a simple cross platform client for Web Services powered by the [Eve
+REST API framework][1]. It leverages both [`System.Net.HttpClient`][5] and
 [`Json.NET`][6] to provide the best possible Eve experience on .NET.
 
 Cross platform
 --------------
-Eve.NET is delivered as portable (PCL) library and runs semalessly on .NET4,
+Eve.NET is delivered as a portable (PCL) library and runs seamlessly on .NET4,
 Mono, Xamarin.iOS, Xamarin.Android, Windows Phone and Windows 8. We use Eve.NET
-to power our iOS applications which of course consume a remote Eve-powered API.
+internally to power our iOS and Windows applications.
 
 Running the tests
 -----------------
-You are supposed to  clone the [`evenet-testbed`][7] repo and run a local instance
-of the test webservice. Alternatively, if you don't have a Python/Eve environmnet
-at hand, you can opt to rely on a free (and slow, and very resource limited) test
-instance which is available online. See [tests code][8] for details.
+You are supposed to  clone the [`evenet-testbed`][7] repo and run a local
+instance of the test webservice. Alternatively, if you don't have a Python/Eve
+environmnet at hand, you can opt to rely on a free (and slow, and very resource
+limited) test instance which is available online. See [tests code][8] for
+details.
+
 License
 -------
 Eve.NET is a [Nicola Iarocci][2] and [Gestionali Amica][3] open source project,
