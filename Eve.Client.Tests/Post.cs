@@ -5,6 +5,9 @@ using System.Net;
 
 namespace Eve.Tests
 {
+    /// <summary>
+    /// Test that POST requests to resource endpoints are properly executed.
+    /// </summary>
     [TestFixture]
     class Post : MethodsBase
     {

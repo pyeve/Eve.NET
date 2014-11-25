@@ -5,6 +5,9 @@ using System.Net;
 
 namespace Eve.Tests
 {
+    /// <summary>
+    /// Test that PUT requests to resource endpoints are properly executed.
+    /// </summary>
     [TestFixture]
     class Put : MethodsBase
     {

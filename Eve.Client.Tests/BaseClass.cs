@@ -3,6 +3,11 @@ using Newtonsoft.Json;
 
 namespace Eve.Tests
 {
+    /// <summary>
+    /// You want to map Eve meta-fields to class properties by flagging them with the RemoteAttribute.
+    /// Since these are usually consistent across API endpoints it is probably a good idea to provide
+    /// a base class for you business objects.
+    /// </summary>
     public abstract class BaseClass
     {
         /// <summary>

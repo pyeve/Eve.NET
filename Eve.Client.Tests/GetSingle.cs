@@ -5,6 +5,9 @@ using NUnit.Framework;
 
 namespace Eve.Tests
 {
+    /// <summary>
+    /// Test that GET requests to document endpoints are properly executed.
+    /// </summary>
     [TestFixture]
     class GetSingle : MethodsBase
     {

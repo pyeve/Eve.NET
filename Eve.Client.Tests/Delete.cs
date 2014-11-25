@@ -5,6 +5,9 @@ using System.Net;
 
 namespace Eve.Tests
 {
+    /// <summary>
+    /// Test that DELETE requests to document endpoints are properly executed.
+    /// </summary>
     [TestFixture]
     class Delete : MethodsBase
     {
