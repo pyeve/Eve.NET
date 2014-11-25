@@ -1,7 +1,8 @@
 Eve.NET
 =======
 Eve.NET is a simple cross platform .NET client for Web Services powered by the
-[Eve REST API framework][1].
+[Eve REST API framework][1]. It leverages both [`System.Net.HttpClient`][5] and 
+[`Json.NET`][6] to provide the best possible Eve experience on .NET.
 
 Cross platform
 --------------
@@ -18,4 +19,5 @@ distributed under the [BSD license][4].
 [2]: http://nicolaiarocci.com
 [3]: http://gestionaleamica.com
 [4]: https://github.com/nicolaiarocci/Eve.NET/blob/master/LICENSE.txt
-
+[5]: http://msdn.microsoft.com/en-us/library/system.net.http.httpclient%28v=vs.118%29.aspx
+[6]: http://james.newtonking.com/json
