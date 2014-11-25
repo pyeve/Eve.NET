@@ -4,8 +4,6 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-// TODO (in progress) test that exceptions are raised when arguments or properties are null or empty.
-
 namespace Eve.Tests
 {
     public class MethodsBase
