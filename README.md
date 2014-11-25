@@ -1,7 +1,13 @@
 Eve.NET
 =======
-Eve.NET is a simple cross platform .NET client for Web
-Services powered by the [Eve REST API framework][1]
+Eve.NET is a simple cross platform .NET client for Web Services powered by the
+[Eve REST API framework][1].
+
+Cross platform
+--------------
+Eve.NET is built as portable (PCL) library and runs semalessly on .NET4, Mono,
+Xamarin.iOS, Xamarin.Android, Windows Phone and Windows 8. We use Eve.NET to
+power our iOS applications which of course consume a remote Eve-powered API.
 
 License
 -------
