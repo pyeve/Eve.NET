@@ -15,9 +15,11 @@ Usage
 
 ### Initialization
 ```C#
-// You want to map Eve meta-fields to class properties by flagging them with the RemoteAttribute.
-// Since these are usually consistent across API endpoints it is probably a good idea to provide
-// a base class for you business objects.
+// You want to map Eve meta-fields to class properties by flagging them with
+// the RemoteAttribute.  Since these are usually consistent across API
+// endpoints it is probably a good idea to provide a base class for you
+// business objects.
+
 public abstract class BaseClass
 {
     [JsonProperty("_id")]
@@ -37,7 +39,9 @@ public abstract class BaseClass
     public DateTime Created { get; set; }
 }
 
-// In both Json and MongoDB it is common to adopt short field names, so we map them to properties.
+// In both Json and MongoDB it is common to adopt short field names, so we map
+// them to properties.
+
 public class Company : BaseClass
 {
     [JsonProperty("n")]
@@ -73,6 +77,7 @@ Assert.AreEqual(companies.Count, 10);
 
 // List<T> with only the items that changed since a DateTime.
 var ifModifiedSince = DateTime.Now.AddDays(-1);
+
 var companies = await client.GetAsync<Company>(ifModifiedSince);
 Assert.AreEqual(HttpStatusCode.OK, client.HttpResponse.StatusCode);
 Assert.AreEqual(companies.Count, 2);
@@ -80,16 +85,19 @@ Assert.AreEqual(companies.Count, 2);
 // GET TO DOCUMENT ENDPOINT
 var company = companies[0];
 
-// Update an existing object silently performing a If-None-Match request based on object ETag. 
-// See http://python-eve.org/features#conditional-requests
+// Update an existing object silently performing a If-None-Match request based
+// on object ETag.  See http://python-eve.org/features#conditional-requests
 company = await client.GetAsync<Company>(target);
-// StatusCode is NotModified since ETag matches the one on the server (no download was performed).
-// Would be OK if a download happened. Object did not change.
+
+// StatusCode is NotModified since ETag matches the one on the server (no
+// download was performed). Would be OK if a download happened. Object did not
+// change.
 Assert.AreEqual(HttpStatusCode.NotModified, client.HttpResponse.StatusCode);
 
 // Raw, conditional GET request
 var companyId = "507c7f79bcf86cd7994f6c0e";
 var eTag = "7776cdb01f44354af8bfa4db0c56eebcb1378975";
+
 var company = await client.GetAsync<Company>("companies", companyId, eTag);
 Assert.AreEqual(HttpStatusCode.NotModified, result.StatusCode);
 ```
