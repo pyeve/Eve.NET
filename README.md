@@ -16,10 +16,9 @@ Usage
 ### Initialization
 ```C#
 // You want to map Eve meta-fields to class properties by flagging them with
-// the RemoteAttribute.  Since these are usually consistent across API
-// endpoints it is probably a good idea to provide a base class for you
-// business objects.
-
+// the RemoteAttribute. Since these are usually consistent across API
+// endpoints it is probably a good idea to provide a base class for your
+// business objects to inherit from.
 public abstract class BaseClass
 {
     [JsonProperty("_id")]
@@ -39,9 +38,8 @@ public abstract class BaseClass
     public DateTime Created { get; set; }
 }
 
-// In both Json and MongoDB it is common to adopt short field names, so we map
-// them to properties.
-
+// In both JSON and MongoDB it is common and good practice to adopt short field
+// names so we map those to our streamlined class properties.
 public class Company : BaseClass
 {
     [JsonProperty("n")]
@@ -51,59 +49,67 @@ public class Company : BaseClass
     public string Password { get; set; }
 }
 
+// Simplest initialization possible.
 var client = new EveClient();
 client.BaseAddess = new Uri("http://api.com");
 
-// BaseAddress on initialization
+// or
 var client = new EveClient { BaseAddress = new Uri("http://api.com") };
 
-// Authenticator instance can also be passed on inititalization
+// or!
 var client = new EveClient { 
     BaseAddress = new Uri("http://api.com"), 
     BasicAuthenticator = new BasicAuthenticator  ("user", "pw")
 };
+
+// Set target resouce for subsequent requests.
+client.ResourceName = "companies";
 ````
 
-### GET Requests
-
+### GET at Resource Endpoints
 ```C#
-// GET AT RESOURCE ENDPOINT
-client.ResourceName = "companies";
-
 // List<T>
 var companies = await client.GetAsync<Company>();
+
 Assert.AreEqual(HttpStatusCode.OK, client.HttpResponse.StatusCode);
 Assert.AreEqual(companies.Count, 10);
 
 // List<T> with only the items that changed since a DateTime.
 var ifModifiedSince = DateTime.Now.AddDays(-1);
-
 var companies = await client.GetAsync<Company>(ifModifiedSince);
+
 Assert.AreEqual(HttpStatusCode.OK, client.HttpResponse.StatusCode);
 Assert.AreEqual(companies.Count, 2);
-
-// GET TO DOCUMENT ENDPOINT
+```
+### GET at Document Endpoints
+```C#
 var company = companies[0];
 
 // Update an existing object silently performing a If-None-Match request based
 // on object ETag.  See http://python-eve.org/features#conditional-requests
 company = await client.GetAsync<Company>(target);
 
-// StatusCode is NotModified since ETag matches the one on the server (no
+// StatusCode is 'NotModified' since ETag matches the one on the server (no
 // download was performed). Would be OK if a download happened. Object did not
 // change.
 Assert.AreEqual(HttpStatusCode.NotModified, client.HttpResponse.StatusCode);
+
 
 // Raw, conditional GET request
 var companyId = "507c7f79bcf86cd7994f6c0e";
 var eTag = "7776cdb01f44354af8bfa4db0c56eebcb1378975";
 
 var company = await client.GetAsync<Company>("companies", companyId, eTag);
-Assert.AreEqual(HttpStatusCode.NotModified, result.StatusCode);
+
+// HttpStatusCode is still 'NotModified'.
+Assert.AreEqual(HttpStatusCode.NotModified, client.HttpResponse.StatusCode);
 ```
 ### POST/Create Requests
 ```C#
 var company = await client.PostAsync<Company>(new Company { Name = "MyCompany" });
+
+// HttpStatusCode is 'Created'.
+Assert.AreEqual(HttpStatusCode.Created, client.HttpResponse.StatusCode);
 Assert.AreEqual("MyCompany", company.Name);
 
 // Newly created object includes properly initialized API metafields.
@@ -111,6 +117,34 @@ Assert.IsInstanceOf<DateTime>(company.Created);
 Assert.IsInstanceOf<DateTime>(company.Updated);
 Assert.IsNotNullOrEmpty(company.UniqueId);
 Assert.IsNotNullOrEmpty(company.ETag);
+```
+### PUT/Replace Requests
+```C#
+company.Name = "YourCompany";
+
+// PUT requests will silently perform a If-Match request so server copy will only be
+// updated if server and document ETag match.
+// See http://python-eve.org/features#data-integrity-and-concurrency-control
+var result = await client.PutAsync<Company>(company);
+
+Assert.AreEqual(HttpStatusCode.OK, client.HttpResponse.StatusCode);
+Assert.AreEqual(result.Name, company.Name);
+
+// UniqueId and Created did not change.
+Assert.AreEqual(result.UniqueId, company.UniqueId);
+Assert.AreEqual(result.Created, company.Created);
+
+// However Updated and ETag have been updated.
+Assert.AreNotEqual(result.Updated, company.Updated);
+Assert.AreNotEqual(result.ETag, company.ETag);
+```
+### DELETE Requests
+```C#
+// DELETE requests will silently perform a If-Match request so document
+// will only be deleted if its ETag matches the one on the server.
+// See http://python-eve.org/features#data-integrity-and-concurrency-control
+var message = await client.DeleteAsync(Original);
+Assert.AreEqual(HttpStatusCode.OK, message.StatusCode);
 ```
 
 Running the tests
