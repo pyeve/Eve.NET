@@ -16,11 +16,10 @@ Usage
 
 // INITIALIZATION
 
-// Simple
 var client = new EveClient();
 client.BaseAddess = new Uri("http://api.com");
 
-// You can also pass the BaseAddress (aka API homepage) on initialization
+// BaseAddress on initialization
 var client = new EveClient { BaseAddress = new Uri("http://api.com") };
 
 // Authenticator instance can also be passed on inititalization
@@ -30,7 +29,7 @@ var client = new EveClient {
 };
 
 
-// GET TO RESOURCE ENDPOINT
+// GET AT RESOURCE ENDPOINT
 client.ResourceName = "companies";
 
 // List<T>
@@ -38,7 +37,7 @@ var companies = await client.GetAsync<Company>();
 Assert.AreEqual(HttpStatusCode.OK, client.HttpResponse.StatusCode);
 Assert.AreEqual(companies.Count, 10);
 
-// List<T> with items that changed since a DateTime.
+// List<T> with only the items that changed since a DateTime.
 var ifModifiedSince = DateTime.Now.AddDays(-1);
 
 var companies = await client.GetAsync<Company>(ifModifiedSince);
@@ -48,21 +47,21 @@ Assert.AreEqual(companies.Count, 2);
 // GET TO DOCUMENT ENDPOINT
 var company = companies[0];
 
-// Updates an existing object silently performing a If-None-Match
+// Update an existing object silently performing a If-None-Match
 // request based on object ETag. 
 // See http://python-eve.org/features#conditional-requests
 company = await client.GetAsync<Company>(target);
 
-// StatusCode is NotModified since ETags matches the one on the 
+// StatusCode is NotModified since ETag matches the one on the 
 // server (no download was performed). Would be OK if a download
-// happened.
+// happened. Object did not change.
 Assert.AreEqual(HttpStatusCode.NotModified, client.HttpResponse.StatusCode);
 
 // Raw, conditional GET request
 var companyId = "507c7f79bcf86cd7994f6c0e";
 var eTag = "7776cdb01f44354af8bfa4db0c56eebcb1378975";
 
-var target = await client.GetAsync<Company>("companies", companyId, eTag);
+var company = await client.GetAsync<Company>("companies", companyId, eTag);
 Assert.AreEqual(HttpStatusCode.NotModified, result.StatusCode);
 
 ```
