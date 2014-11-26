@@ -33,13 +33,13 @@ client.ResourceName = "companies";
 ````
 ### GET at Resource Endpoints
 ```C#
-// List<T>
+// Returns a List<T>.
 var companies = await client.GetAsync<Company>();
 
 Assert.AreEqual(HttpStatusCode.OK, client.HttpResponse.StatusCode);
 Assert.AreEqual(companies.Count, 10);
 
-// List<T> with only the items that changed since a DateTime.
+// Returns a List<T> which only includes changed items since a DateTime.
 var ifModifiedSince = DateTime.Now.AddDays(-1);
 var companies = await client.GetAsync<Company>(ifModifiedSince);
 
@@ -52,7 +52,7 @@ var company = companies[0];
 
 // Update an existing object silently performing a If-None-Match request based
 // on object ETag.  See http://python-eve.org/features#conditional-requests
-company = await client.GetAsync<Company>(target);
+company = await client.GetAsync<Company>(company);
 
 // StatusCode is 'NotModified' since ETag matches the one on the server (no
 // download was performed). Would be OK if a download happened. Object did not
