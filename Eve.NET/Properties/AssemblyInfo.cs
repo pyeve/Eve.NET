@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Eve.NET")]
-[assembly: AssemblyDescription("Simple portable HTTP and REST Client for Humans")]
+[assembly: AssemblyDescription("Simple portable HTTP and REST Client for Humans™")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Nicola Iarocci")]
 [assembly: AssemblyProduct("Eve.NET")]
