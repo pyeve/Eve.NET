@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Client", "Eve.Client\Eve.Client.csproj", "{D0E09787-FEC9-4A6B-92D4-78DB328E749D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Client.Tests", "Eve.Client.Tests\Eve.Client.Tests.csproj", "{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F2F838C6-9BF7-4FC9-B2A4-A69E7B5D46BF}"
 	ProjectSection(SolutionItems) = preProject
 		AUTHORS.txt = AUTHORS.txt
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.NET", "Eve.NET\Eve.NET.csproj", "{D0E09787-FEC9-4A6B-92D4-78DB328E749D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.NET.Tests", "Eve.NET.Tests\Eve.NET.Tests.csproj", "{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
