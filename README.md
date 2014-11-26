@@ -1,14 +1,15 @@
 Eve.NET
 =======
-Eve.NET is a simple cross platform client for Web Services powered by the [Eve
-REST API framework][1]. It leverages both [`System.Net.HttpClient`][5] and
-[`Json.NET`][6] to provide the best possible Eve experience on .NET.
+Eve.NET is a simple HTTP and REST client for Web Services powered by the [Eve 
+Framework][1]. It leverages both `System.Net.HttpClient` and `Json.NET` to 
+provide the best possible Eve experience on the .NET platform.
 
 Cross platform
 --------------
-Eve.NET is delivered as a portable (PCL) library and runs seamlessly on .NET4,
-Mono, Xamarin.iOS, Xamarin.Android, Windows Phone and Windows 8. We use Eve.NET
-internally to power our iOS and Windows applications.
+Written and maintained by the same author of the Eve Framework, Eve.NET is 
+delivered as a portable library (PCL) which runs seamlessly on .NET4, Mono, 
+Xamarin.iOS, Xamarin.Android, Windows Phone 8 and Windows 8. We use Eve.NET 
+internally to power our iOS, Web and Windows applications.
 
 Usage
 -----
@@ -160,6 +161,15 @@ Assert.AreEqual("application/json", result.Content.Headers.ContentType.ToString(
 // Please note that you also get the HttpResponseMessage object with GetAsync<T> requests, 
 // exposed by the HttpResponse property.
 ```
+Installation
+------------
+Eve.NET is on [NuGet][9]. Run the following command on the Package Manager Console:
+
+```
+PM> Install-Package Eve.NET
+```
+Or install via the NuGet Package Manager in Visual Studio. If you are on Xamarin Studio make sure the `Show pre-release packages` option is enabled when using the `Add Package` UI or you will get an error that it can't resolve Async dependencies (neeed in order to make Async available on .NET4).
+
 Running the tests
 -----------------
 You are supposed to  clone the [`evenet-testbed`][7] repo and run a local
@@ -181,3 +191,4 @@ distributed under the [BSD license][4].
 [6]: http://james.newtonking.com/json
 [7]: https://github.com/nicolaiarocci/Eve.NET-testbed
 [8]: https://github.com/nicolaiarocci/Eve.NET/blob/master/Eve.Client.Tests/MethodsBase.cs#L13-L31
+[9]: https://www.nuget.org/packages/Eve.NET/
