@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Amica.vNext.Http")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Eve.NET")]
+[assembly: AssemblyDescription("Simple portable HTTP and REST Client for Humans")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CIR 2000")]
-[assembly: AssemblyProduct("Amica.vNext.Http")]
-[assembly: AssemblyCopyright("Copyright © CIR 2000 2014")]
+[assembly: AssemblyCompany("Nicola Iarocci")]
+[assembly: AssemblyProduct("Eve.NET")]
+[assembly: AssemblyCopyright("Copyright © Nicola Iarocci and CIR2000 - 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
@@ -26,5 +26,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.1.0.0")]
