@@ -15,40 +15,6 @@ Usage
 
 ### Initialization
 ```C#
-// You want to map Eve meta-fields to class properties by flagging them with
-// the RemoteAttribute. Since these are usually consistent across API
-// endpoints it is probably a good idea to provide a base class for your
-// business objects to inherit from.
-public abstract class BaseClass
-{
-    [JsonProperty("_id")]
-    [Remote(Meta.DocumentId)]
-    public string UniqueId { get; set; }
-
-    [JsonProperty("_etag")]
-    [Remote(Meta.ETag)]
-    public string ETag { get; set; }
-
-    [JsonProperty("_updated")]
-    [Remote(Meta.LastUpdated)]
-    public DateTime Updated { get; set; }
-
-    [JsonProperty("_created")]
-    [Remote(Meta.DateCreated)]
-    public DateTime Created { get; set; }
-}
-
-// In both JSON and MongoDB it is common and good practice to adopt short field
-// names so we map those to our streamlined class properties.
-public class Company : BaseClass
-{
-    [JsonProperty("n")]
-    public string Name { get; set; }
-
-    [JsonProperty("p")]
-    public string Password { get; set; }
-}
-
 // Simplest initialization possible.
 var client = new EveClient();
 client.BaseAddess = new Uri("http://api.com");
@@ -157,6 +123,42 @@ Assert.AreNotEqual(result.ETag, company.ETag);
 // See http://python-eve.org/features#data-integrity-and-concurrency-control
 var message = await client.DeleteAsync(Original);
 Assert.AreEqual(HttpStatusCode.OK, message.StatusCode);
+```
+### Mapping JSON and Eve meta-fields to Classes
+```C#
+// You want to map Eve meta-fields to class properties by flagging them with
+// the RemoteAttribute. Since these are usually consistent across API
+// endpoints it is probably a good idea to provide a base class for your
+// business objects to inherit from.
+public abstract class BaseClass
+{
+    [JsonProperty("_id")]
+    [Remote(Meta.DocumentId)]
+    public string UniqueId { get; set; }
+
+    [JsonProperty("_etag")]
+    [Remote(Meta.ETag)]
+    public string ETag { get; set; }
+
+    [JsonProperty("_updated")]
+    [Remote(Meta.LastUpdated)]
+    public DateTime Updated { get; set; }
+
+    [JsonProperty("_created")]
+    [Remote(Meta.DateCreated)]
+    public DateTime Created { get; set; }
+}
+
+// In both JSON and MongoDB it is common and good practice to adopt short field
+// names so we map those to our streamlined class properties.
+public class Company : BaseClass
+{
+    [JsonProperty("n")]
+    public string Name { get; set; }
+
+    [JsonProperty("p")]
+    public string Password { get; set; }
+}
 ```
 
 Running the tests
