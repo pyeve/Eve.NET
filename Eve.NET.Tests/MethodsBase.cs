@@ -38,7 +38,7 @@ namespace Eve.Tests
             // Make sure remote remote endpoint is completely empty.
             // We use the standard HttpClient for this (we aren't testing anything yet).
             var hc = new HttpClient { BaseAddress = new Uri(Service) };
-            Assert.IsTrue(hc.DeleteAsync(string.Format("/{0}", Endpoint)).Result.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(hc.DeleteAsync(string.Format("{0}", Endpoint)).Result.StatusCode == HttpStatusCode.OK);
 
             // Ok let's roll now.
             EveClient = new EveClient(Service);
