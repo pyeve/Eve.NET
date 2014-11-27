@@ -15,18 +15,23 @@ namespace Eve.Tests
         // you can run the tests againsts a free test instance which is running on the web 
         // (see below).
 
-        // LOCAL INSTANCE
+#if (VM)
+        // VIRTUALBOX IMAGE
         // In my case I am running Windows in a VirtualBox VM so in order to access the 
         // OSX Host 'localhost' where a local instance of the REST API is running, I use 
         // the standard 10.0.2.2:5000 uri.
         internal const string Service = "http://10.0.2.2:5000/";
-
+#elif (TESTBED)
         // REMOTE INSTANCE
         // If you don't have a local Eve.NET-testbed instance then you can opt to run the 
         // tests against the free instance which is available online. Tests will run much 
         // slower though and please, don't overuse it: the webservice runs on very limited 
         // resources and we want everyone to keep enjoying it.
-        //internal const string Service = "http://evenet-testbed.herokuapp.com";
+        internal const string Service = "http://evenet-testbed.herokuapp.com";
+#else
+        // LOCAL INSTANCE
+        internal const string Service = "http://localhost:5000/";
+#endif
 
         internal const string Endpoint = "companies";
         internal EveClient EveClient;
@@ -38,7 +43,7 @@ namespace Eve.Tests
             // Make sure remote remote endpoint is completely empty.
             // We use the standard HttpClient for this (we aren't testing anything yet).
             var hc = new HttpClient { BaseAddress = new Uri(Service) };
-            Assert.IsTrue(hc.DeleteAsync(string.Format("{0}", Endpoint)).Result.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(hc.DeleteAsync(Endpoint).Result.StatusCode == HttpStatusCode.OK);
 
             // Ok let's roll now.
             EveClient = new EveClient(Service);
