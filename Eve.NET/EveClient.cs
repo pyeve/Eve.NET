@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Reflection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -18,14 +19,14 @@ namespace Eve
 
 		private HttpResponseMessage _httpResponse;
 
-	    public EveClient ()
+		public EveClient ()
 		{
 			// don't serialize null values.
 			JsonConvert.DefaultSettings = () => new JsonSerializerSettings { 
 				NullValueHandling = NullValueHandling.Ignore,
 			};
 
-		    LastUpdatedField = "_updated";
+			LastUpdatedField = "_updated";
 		}
 
 		public EveClient (Uri baseAddress) : this ()
@@ -52,75 +53,74 @@ namespace Eve
 
 		#region "G E T"
 
-	    /// <summary>
-	    /// Performs an asynchronous GET request on an arbitrary endpoint.
-	    /// </summary>
-	    /// <param name="uri">Endpoint URI.</param>
-	    /// <param name="etag">ETag</param>
-	    /// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
-	    public async Task<HttpResponseMessage> GetAsync(string uri, string etag, DateTime? ifModifiedSince)
-	    {
+		/// <summary>
+		/// Performs an asynchronous GET request on an arbitrary endpoint.
+		/// </summary>
+		/// <param name="uri">Endpoint URI.</param>
+		/// <param name="etag">ETag</param>
+		/// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
+		public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince)
+		{
 	        
-	        if (uri == null) {
-	            throw new ArgumentNullException("uri");
-	        }
+			if (uri == null) {
+				throw new ArgumentNullException ("uri");
+			}
 			ValidateBaseAddress ();
 
 			using (var client = new HttpClient ()) {
 				Settings (client);
-                var query = new System.Text.StringBuilder(uri);
-			    if (etag != null) {
-                    client.DefaultRequestHeaders.TryAddWithoutValidation ("If-None-Match", etag);
-			    }
-			    if (ifModifiedSince != null)
-			    {
-			        query.Append(string.Format(@"?where={{""{0}"": ""{1}""}}", LastUpdatedField,  ((DateTime) ifModifiedSince).ToString("r")));
-                    //client.DefaultRequestHeaders.TryAddWithoutValidation ("If-Modified-Since", ((DateTime)ifModifiedSince).ToString("r"));
-			    }
-			    _httpResponse = await client.GetAsync(query.ToString());
+				var query = new System.Text.StringBuilder (uri);
+				if (etag != null) {
+					client.DefaultRequestHeaders.TryAddWithoutValidation ("If-None-Match", etag);
+				}
+				if (ifModifiedSince != null) {
+					query.Append (string.Format (@"?where={{""{0}"": ""{1}""}}", LastUpdatedField, ((DateTime)ifModifiedSince).ToString ("r")));
+					//client.DefaultRequestHeaders.TryAddWithoutValidation ("If-Modified-Since", ((DateTime)ifModifiedSince).ToString("r"));
+				}
+				_httpResponse = await client.GetAsync (query.ToString ());
 				return _httpResponse;
 			}
-	    }
+		}
 
-	    /// <summary>
-	    /// Performs an asynchronous GET request on an arbitrary endpoint.
-	    /// </summary>
-	    /// <param name="uri">Endpoint URI.</param>
-	    /// <param name="etag">ETag</param>
-	    public async Task<HttpResponseMessage> GetAsync(string uri, string etag)
-	    {
-	        return await GetAsync(uri, etag, null);
+		/// <summary>
+		/// Performs an asynchronous GET request on an arbitrary endpoint.
+		/// </summary>
+		/// <param name="uri">Endpoint URI.</param>
+		/// <param name="etag">ETag</param>
+		public async Task<HttpResponseMessage> GetAsync (string uri, string etag)
+		{
+			return await GetAsync (uri, etag, null);
 
-	    }
+		}
 
-	    /// <summary>
-	    /// Performs an asynchronous GET request on an arbitrary endpoint.
-	    /// </summary>
-	    /// <param name="uri">Endpoint URI.</param>
-	    /// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
-	    public async Task<HttpResponseMessage> GetAsync(string uri, DateTime? ifModifiedSince)
-	    {
-	        return await GetAsync(uri, null, ifModifiedSince);
-	    }
+		/// <summary>
+		/// Performs an asynchronous GET request on an arbitrary endpoint.
+		/// </summary>
+		/// <param name="uri">Endpoint URI.</param>
+		/// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
+		public async Task<HttpResponseMessage> GetAsync (string uri, DateTime? ifModifiedSince)
+		{
+			return await GetAsync (uri, null, ifModifiedSince);
+		}
 
-        /// <summary>
-        /// Performs an asynchronous GET request on an arbitrary endpoint.
-        /// </summary>
-        /// <param name="uri">Endpoint URI.</param>
-	    public async Task<HttpResponseMessage> GetAsync(string uri)
-        {
-            return await GetAsync(uri, etag:null);
-        }
+		/// <summary>
+		/// Performs an asynchronous GET request on an arbitrary endpoint.
+		/// </summary>
+		/// <param name="uri">Endpoint URI.</param>
+		public async Task<HttpResponseMessage> GetAsync (string uri)
+		{
+			return await GetAsync (uri, etag: null);
+		}
 
-	    /// <summary>
-	    /// Performs an asynchronous GET request on a document endpoint.
-	    /// </summary>
-	    /// <returns> An istance of the requested document, or null if document was not found or some other issue arised.</returns>
-	    /// <param name="resourceName">Resource name.</param>
-	    /// <param name="documentId">Document identifier.</param>
-	    /// <param name="etag">Document ETag.</param>
-	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
-	    public async Task<T> GetAsync<T> (string resourceName, string documentId, string etag)
+		/// <summary>
+		/// Performs an asynchronous GET request on a document endpoint.
+		/// </summary>
+		/// <returns> An istance of the requested document, or null if document was not found or some other issue arised.</returns>
+		/// <param name="resourceName">Resource name.</param>
+		/// <param name="documentId">Document identifier.</param>
+		/// <param name="etag">Document ETag.</param>
+		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+		public async Task<T> GetAsync<T> (string resourceName, string documentId, string etag)
 		{
 
 			if (resourceName == null) {
@@ -150,7 +150,7 @@ namespace Eve
 		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 		public async Task<T> GetAsync<T> (string resourceName, string documentId)
 		{
-		    return await GetAsync<T>(resourceName, documentId, null);
+			return await GetAsync<T> (resourceName, documentId, null);
 		}
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace Eve
 		public async Task<T> GetAsync<T> (object obj)
 		{
 			ValidateResourceName ();
-		    return await GetAsync<T>(ResourceName, obj);
+			return await GetAsync<T> (ResourceName, obj);
 		}
 
 		/// <summary>
@@ -178,9 +178,9 @@ namespace Eve
 				throw new ArgumentNullException ("obj");
 			}
 
-			var retObj = await GetAsync<T> (resourceName, GetDocumentId (obj), GetETag(obj));
+			var retObj = await GetAsync<T> (resourceName, GetDocumentId (obj), GetETag (obj));
 
-		    return _httpResponse.StatusCode == HttpStatusCode.NotModified ? (T)obj : retObj;
+			return _httpResponse.StatusCode == HttpStatusCode.NotModified ? (T)obj : retObj;
 		}
 
 		/// <summary>
@@ -205,15 +205,15 @@ namespace Eve
 			return await GetAsync<T> (ResourceName, ifModifiedSince);
 		}
 
-	    /// <summary>
-	    /// Performs an asynchronous GET request on a resource endpoint.
-	    /// </summary>
-	    /// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
-	    /// <param name="resourceName">Resource endpoint.</param>
-	    /// <param name="ifModifiedSince">Return only documents that changed since this date. </param>
-	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
-	    public async Task<List<T>> GetAsync<T>(string resourceName, DateTime? ifModifiedSince)
-	    {
+		/// <summary>
+		/// Performs an asynchronous GET request on a resource endpoint.
+		/// </summary>
+		/// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
+		/// <param name="resourceName">Resource endpoint.</param>
+		/// <param name="ifModifiedSince">Return only documents that changed since this date. </param>
+		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+		public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince)
+		{
 			if (resourceName == null) {
 				throw new ArgumentNullException ("resourceName");
 			}
@@ -223,13 +223,13 @@ namespace Eve
 
 			_httpResponse = await GetAsync (resourceName, ifModifiedSince);
 
-		    if (_httpResponse.StatusCode != HttpStatusCode.OK)
-		        return default(List<T>);
+			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+				return default(List<T>);
 			var json = await _httpResponse.Content.ReadAsStringAsync ();
 
-		    var jo = JObject.Parse(json);
-		    return JsonConvert.DeserializeObject<List<T>>(jo.Property("_items").Value.ToString(Formatting.None));
-	    }
+			var jo = JObject.Parse (json);
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		}
 
 		/// <summary>
 		/// Performs an asynchronous GET request on a resource endpoint.
@@ -239,7 +239,7 @@ namespace Eve
 		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 		public async Task<List<T>> GetAsync<T> (string resourceName)
 		{
-		    return await GetAsync<T>(resourceName, ifModifiedSince:null);
+			return await GetAsync<T> (resourceName, ifModifiedSince: null);
 		}
 
 		#endregion
@@ -258,9 +258,9 @@ namespace Eve
 			if (resourceName == null) {
 				throw new ArgumentNullException ("resourceName");
 			}
-		    if (resourceName == string.Empty) {
-		        throw new ArgumentException("resourceName");
-		    }
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName");
+			}
 			if (obj == null) {
 				throw new ArgumentNullException ("obj");
 			}
@@ -407,9 +407,9 @@ namespace Eve
 			if (resourceName == null) {
 				throw new ArgumentNullException ("resourceName");
 			}
-		    if (resourceName == string.Empty) {
-		        throw new ArgumentException("resourceName");
-		    }
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName");
+			}
 			if (obj == null) {
 				throw new ArgumentNullException ("obj");
 			}
@@ -432,6 +432,7 @@ namespace Eve
 			_httpResponse = await DeleteAsync (ResourceName, obj);
 			return _httpResponse;
 		}
+
 		#endregion
 
 		#region "P R O P R I E R T I E S"
@@ -461,18 +462,18 @@ namespace Eve
 		/// <value>The http response.</value>
 		public HttpResponseMessage HttpResponse{ get { return _httpResponse; } }
 
-	    /// <summary>
-	    /// Gets or sets the authenticator.
-	    /// </summary>
-	    /// <value>The authenticator.</value>
-	    public BasicAuthenticator BasicAuthenticator { get; set; }
+		/// <summary>
+		/// Gets or sets the authenticator.
+		/// </summary>
+		/// <value>The authenticator.</value>
+		public BasicAuthenticator BasicAuthenticator { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the LastUpdated field.
-        /// </summary>
-	    public string LastUpdatedField { get; set; }
+		/// <summary>
+		/// Gets or sets the name of the LastUpdated field.
+		/// </summary>
+		public string LastUpdatedField { get; set; }
 
-	    #endregion
+		#endregion
 
 		#region "S U P P O R T"
 
@@ -546,17 +547,22 @@ namespace Eve
 		/// <param name="metaField">Meta field to be returned.</param>
 		private static string GetRemoteMetaFieldValue (object obj, Meta metaField)
 		{
+			#if PROFILE7
+			var pInfo = obj.GetType ().GetRuntimeProperties ().Where (
+				            p => p.IsDefined (typeof(RemoteAttribute), true)).ToList ();
+			#else
 			var pInfo = obj.GetType ().GetProperties ().Where (
 				            p => p.IsDefined (typeof(RemoteAttribute), true)).ToList ();
+			#endif
 
 			foreach (var p in pInfo) {
 				var attr = (RemoteAttribute)p.GetCustomAttributes (typeof(RemoteAttribute), true).FirstOrDefault ();
 				if (attr != null && attr.Field == metaField) {
 					var v = p.GetValue (obj, null);
-				    return (v == null) ? null : v.ToString();
+					return (v == null) ? null : v.ToString ();
 				}
 			}
-		    return null;
+			return null;
 		}
 
 		/// <summary>
@@ -565,7 +571,7 @@ namespace Eve
 		private void ValidateResourceName ()
 		{
 			if (ResourceName == null) {
-                // ReSharper disable once NotResolvedInText
+				// ReSharper disable once NotResolvedInText
 				throw new ArgumentNullException ("ResourceName");
 			}
 			if (ResourceName == string.Empty) {
@@ -573,13 +579,13 @@ namespace Eve
 			}
 		}
 
-	    /// <summary>
+		/// <summary>
 		/// Validates the base address.
 		/// </summary>
 		private void ValidateBaseAddress ()
 		{
 			if (BaseAddress == null) {
-                // ReSharper disable once NotResolvedInText
+				// ReSharper disable once NotResolvedInText
 				throw new ArgumentNullException ("BaseAddress");
 			}
 		}
