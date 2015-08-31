@@ -77,6 +77,10 @@ namespace Eve.Tests
 
             var result = EveClient.GetAsync<Company>(Endpoint, original3.Updated).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
+            Assert.AreEqual(result.Count, 0);
+
+            result = EveClient.GetAsync<Company>(Endpoint, Original2.Updated).Result;
+            Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
             Assert.AreEqual(result.Count, 1);
             ValidateAreEquals(original3, result[0]);
         }
