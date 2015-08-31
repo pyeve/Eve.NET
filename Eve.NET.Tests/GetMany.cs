@@ -48,6 +48,10 @@ namespace Eve.Tests
             EveClient.ResourceName = Endpoint;
             var result = EveClient.GetAsync<Company>(original3.Updated).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
+            Assert.AreEqual(result.Count, 0);
+
+            result = EveClient.GetAsync<Company>(Original2.Updated).Result;
+            Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
             Assert.AreEqual(result.Count, 1);
             ValidateAreEquals(original3, result[0]);
         }

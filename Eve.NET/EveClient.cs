@@ -76,8 +76,7 @@ namespace Eve
 					client.DefaultRequestHeaders.TryAddWithoutValidation ("If-None-Match", etag);
 				}
 				if (ifModifiedSince != null) {
-					query.Append (string.Format (@"?where={{""{0}"": ""{1}""}}", LastUpdatedField, ((DateTime)ifModifiedSince).ToString ("r")));
-					//client.DefaultRequestHeaders.TryAddWithoutValidation ("If-Modified-Since", ((DateTime)ifModifiedSince).ToString("r"));
+					query.Append (string.Format (@"?where={{""{0}"": {{""$gt"": ""{1}""}}}}", LastUpdatedField, ((DateTime)ifModifiedSince).ToString ("r")));
 				}
 				_httpResponse = await client.GetAsync (query.ToString ());
 				return _httpResponse;
