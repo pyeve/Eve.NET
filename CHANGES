@@ -6,6 +6,7 @@ v0.1.1.0
 
 Not released yet.
 
+- New: support for raw queries.
 - Fix: If-Modified-Since was not respected in GetAsync.
 
 v0.1.0.1

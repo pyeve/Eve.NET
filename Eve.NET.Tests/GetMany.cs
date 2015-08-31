@@ -86,6 +86,35 @@ namespace Eve.Tests
         }
 
         [Test]
+        public void AcceptEndpointConsiderImsAndQuery()
+        {
+            System.Threading.Thread.Sleep(1000);
+
+            var rawQuery = @"{""n"": ""Name2""}";
+            var result = EveClient.GetAsync<Company>(Endpoint, null, query: rawQuery).Result;
+            Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
+            Assert.AreEqual(result.Count, 1);
+
+            // POST in order to get a valid ETag
+            var original3 = EveClient.PostAsync<Company>(Endpoint, new Company { Name = "Name3" }).Result;
+            Assert.AreEqual(HttpStatusCode.Created, EveClient.HttpResponse.StatusCode);
+
+            rawQuery = @"{""n"": ""Name3""}";
+            result = EveClient.GetAsync<Company>(Endpoint, null, query: rawQuery).Result;
+            Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
+            Assert.AreEqual(result.Count, 1);
+
+            result = EveClient.GetAsync<Company>(Endpoint, original3.Updated, rawQuery).Result;
+            Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
+            Assert.AreEqual(result.Count, 0);
+
+            result = EveClient.GetAsync<Company>(Endpoint, Original2.Updated, rawQuery).Result;
+            Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
+            Assert.AreEqual(result.Count, 1);
+        }
+
+
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public async Task BaseAddessNullException()
         {

@@ -55,13 +55,14 @@ namespace Eve
 
 		#region "G E T"
 
-		/// <summary>
-		/// Performs an asynchronous GET request on an arbitrary endpoint.
-		/// </summary>
-		/// <param name="uri">Endpoint URI.</param>
-		/// <param name="etag">ETag</param>
-		/// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
-		public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince)
+	    /// <summary>
+	    /// Performs an asynchronous GET request on an arbitrary endpoint.
+	    /// </summary>
+	    /// <param name="uri">Endpoint URI.</param>
+	    /// <param name="etag">ETag</param>
+	    /// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
+	    /// <param name="rawQuery">Return only documents that match this query.</param>
+	    public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince, string rawQuery)
 		{
 	        
 			if (uri == null) {
@@ -71,14 +72,23 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				Settings (client);
-				var query = new System.Text.StringBuilder (uri);
+
 				if (etag != null) {
 					client.DefaultRequestHeaders.TryAddWithoutValidation ("If-None-Match", etag);
 				}
-				if (ifModifiedSince != null) {
-					query.Append (string.Format (@"?where={{""{0}"": {{""$gt"": ""{1}""}}}}", LastUpdatedField, ((DateTime)ifModifiedSince).ToString ("r")));
-				}
-				_httpResponse = await client.GetAsync (query.ToString ());
+
+				var q = new System.Text.StringBuilder (uri);
+
+			    var imsPart = 
+                    ifModifiedSince == null ? 
+                        "{}" : 
+                        string.Format (@"{{""{0}"": {{""$gt"": ""{1}""}}}}", LastUpdatedField, 
+                            ((DateTime)ifModifiedSince).ToString ("r"));
+
+                var queryPart = @rawQuery ?? "{}";
+
+			    q.Append(string.Format(@"?where={{""$and"": [{0}, {1}]}}", imsPart, queryPart));
+				_httpResponse = await client.GetAsync (q.ToString ());
 				return _httpResponse;
 			}
 		}
@@ -90,7 +100,7 @@ namespace Eve
 		/// <param name="etag">ETag</param>
 		public async Task<HttpResponseMessage> GetAsync (string uri, string etag)
 		{
-			return await GetAsync (uri, etag, null);
+			return await GetAsync (uri, etag, null, null);
 
 		}
 
@@ -101,7 +111,7 @@ namespace Eve
 		/// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
 		public async Task<HttpResponseMessage> GetAsync (string uri, DateTime? ifModifiedSince)
 		{
-			return await GetAsync (uri, null, ifModifiedSince);
+			return await GetAsync (uri, null, ifModifiedSince, null);
 		}
 
 		/// <summary>
@@ -223,6 +233,33 @@ namespace Eve
 			}
 
 			_httpResponse = await GetAsync (resourceName, ifModifiedSince);
+
+			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+				return default(List<T>);
+			var json = await _httpResponse.Content.ReadAsStringAsync ();
+
+			var jo = JObject.Parse (json);
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		}
+
+	    /// <summary>
+	    /// Performs an asynchronous GET request on a resource endpoint.
+	    /// </summary>
+	    /// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
+	    /// <param name="resourceName">Resource endpoint.</param>
+	    /// <param name="ifModifiedSince">Return only documents that changed since this date. </param>
+	    /// <param name="rawQuery">Only return documents matching this query.</param>
+	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+	    public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince, string rawQuery)
+		{
+			if (resourceName == null) {
+				throw new ArgumentNullException ("resourceName");
+			}
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName cannot be empty.");
+			}
+
+			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, rawQuery);
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
