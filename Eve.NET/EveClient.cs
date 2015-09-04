@@ -29,6 +29,7 @@ namespace Eve
 			};
 
 			LastUpdatedField = "_updated";
+		    DeletedField = "_deleted";
 		}
 
 		public EveClient (Uri baseAddress) : this ()
@@ -61,8 +62,9 @@ namespace Eve
 	    /// <param name="uri">Endpoint URI.</param>
 	    /// <param name="etag">ETag</param>
 	    /// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
+	    /// <param name="softDeleted">Wether soft deleted documents should be included or not.</param>
 	    /// <param name="rawQuery">Return only documents that match this query.</param>
-	    public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince, string rawQuery)
+	    public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince, bool softDeleted, string rawQuery)
 		{
 	        
 			if (uri == null) {
@@ -85,9 +87,10 @@ namespace Eve
                         string.Format (@"{{""{0}"": {{""$gt"": ""{1}""}}}}", LastUpdatedField, 
                             ((DateTime)ifModifiedSince).ToString ("r"));
 
+			    var softDeletePart = (!softDeleted) ? "{}" : string.Format(@"{{""{0}"": true}}", DeletedField);
                 var queryPart = @rawQuery ?? "{}";
 
-			    q.Append(string.Format(@"?where={{""$and"": [{0}, {1}]}}", imsPart, queryPart));
+			    q.Append(string.Format(@"?where={{""$and"": [{0}, {1}, {2}]}}", imsPart, queryPart, softDeletePart));
 				_httpResponse = await client.GetAsync (q.ToString ());
 				return _httpResponse;
 			}
@@ -100,7 +103,7 @@ namespace Eve
 		/// <param name="etag">ETag</param>
 		public async Task<HttpResponseMessage> GetAsync (string uri, string etag)
 		{
-			return await GetAsync (uri, etag, null, null);
+			return await GetAsync (uri, etag, null, false, null);
 
 		}
 
@@ -111,7 +114,7 @@ namespace Eve
 		/// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
 		public async Task<HttpResponseMessage> GetAsync (string uri, DateTime? ifModifiedSince)
 		{
-			return await GetAsync (uri, null, ifModifiedSince, null);
+			return await GetAsync (uri, null, ifModifiedSince, false, null);
 		}
 
 		/// <summary>
@@ -217,6 +220,16 @@ namespace Eve
 		}
 
 		/// <summary>
+		/// Performs an asynchronous GET request for a specific document.
+		/// </summary>
+		/// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
+		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+		public async Task<List<T>> GetAsync<T> (bool softDeleted)
+		{
+			ValidateResourceName ();
+			return await GetAsync<T> (ResourceName, softDeleted);
+		}
+		/// <summary>
 		/// Performs an asynchronous GET request on a resource endpoint.
 		/// </summary>
 		/// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
@@ -242,6 +255,31 @@ namespace Eve
 			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
 		}
 
+		/// <summary>
+		/// Performs an asynchronous GET request on a resource endpoint.
+		/// </summary>
+		/// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
+		/// <param name="resourceName">Resource endpoint.</param>
+		/// <param name="softDeleted">Include deleted documents. </param>
+		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+		public async Task<List<T>> GetAsync<T> (string resourceName, bool softDeleted)
+		{
+			if (resourceName == null) {
+				throw new ArgumentNullException ("resourceName");
+			}
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName cannot be empty.");
+			}
+
+			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, null);
+
+			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+				return default(List<T>);
+			var json = await _httpResponse.Content.ReadAsStringAsync ();
+
+			var jo = JObject.Parse (json);
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		}
 	    /// <summary>
 	    /// Performs an asynchronous GET request on a resource endpoint.
 	    /// </summary>
@@ -259,7 +297,90 @@ namespace Eve
 				throw new ArgumentException ("resourceName cannot be empty.");
 			}
 
-			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, rawQuery);
+			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, false, rawQuery);
+
+			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+				return default(List<T>);
+			var json = await _httpResponse.Content.ReadAsStringAsync ();
+
+			var jo = JObject.Parse (json);
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		}
+
+	    /// <summary>
+	    /// Performs an asynchronous GET request on a resource endpoint.
+	    /// </summary>
+	    /// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
+	    /// <param name="resourceName">Resource endpoint.</param>
+	    /// <param name="softDeleted">Include deleted documents. </param>
+	    /// <param name="rawQuery">Only return documents matching this query.</param>
+	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+	    public async Task<List<T>> GetAsync<T> (string resourceName, bool softDeleted, string rawQuery)
+		{
+			if (resourceName == null) {
+				throw new ArgumentNullException ("resourceName");
+			}
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName cannot be empty.");
+			}
+
+			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, rawQuery);
+
+			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+				return default(List<T>);
+			var json = await _httpResponse.Content.ReadAsStringAsync ();
+
+			var jo = JObject.Parse (json);
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		}
+
+
+	    /// <summary>
+	    /// Performs an asynchronous GET request on a resource endpoint.
+	    /// </summary>
+	    /// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
+	    /// <param name="resourceName">Resource endpoint.</param>
+	    /// <param name="ifModifiedSince">Return only documents that changed since this date. </param>
+	    /// <param name="softDeleted">Include deleted documents.</param>
+	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+	    public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince, bool softDeleted)
+		{
+			if (resourceName == null) {
+				throw new ArgumentNullException ("resourceName");
+			}
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName cannot be empty.");
+			}
+
+			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, null);
+
+			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+				return default(List<T>);
+			var json = await _httpResponse.Content.ReadAsStringAsync ();
+
+			var jo = JObject.Parse (json);
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		}
+
+	    /// <summary>
+	    /// Performs an asynchronous GET request on a resource endpoint.
+	    /// </summary>
+	    /// <returns>A list of objects of the requested type, or null if the response from the remote service was something other than 200 OK.</returns>
+	    /// <param name="resourceName">Resource endpoint.</param>
+	    /// <param name="ifModifiedSince">Return only documents that changed since this date. </param>
+	    /// <param name="softDeleted">Wether soft deleted documents should be returned or not.</param>
+	    /// <param name="rawQuery">Only return documents matching this query.</param>
+	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
+	    public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince, bool softDeleted, string rawQuery)
+		{
+			if (resourceName == null) {
+				throw new ArgumentNullException ("resourceName");
+			}
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName cannot be empty.");
+			}
+
+			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, rawQuery);
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
@@ -511,6 +632,10 @@ namespace Eve
 		/// </summary>
 		public string LastUpdatedField { get; set; }
 
+		/// <summary>
+		/// Gets or sets the name of the Deleted field.
+		/// </summary>
+		public string DeletedField { get; set; }
 		#endregion
 
 		#region "S U P P O R T"

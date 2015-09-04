@@ -41,5 +41,13 @@ namespace Eve.Tests
         [JsonProperty("_created")]
         [Remote(Meta.DateCreated)]
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Gets or sets the delete state.
+        /// </summary>
+        /// <value>The creation date.</value>
+        [JsonProperty("_deleted")]
+        [Remote(Meta.Deleted)]
+        public bool Deleted { get; set; }
     }
 }

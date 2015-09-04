@@ -6,6 +6,8 @@ v0.1.1.0
 
 Not released yet.
 
+- New: support for including deleted documents in queries. Requires
+  SOFT_DELETE feature to be enabled on the server.
 - New: support for raw queries.
 - Fix: If-Modified-Since was not respected in GetAsync.
 

@@ -27,6 +27,7 @@ namespace Eve
 		ETag,
 		LastUpdated,
 		DateCreated,
+        Deleted
 	}
 }
 

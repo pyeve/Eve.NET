@@ -86,21 +86,20 @@ namespace Eve.Tests
         }
 
         [Test]
-        public void AcceptEndpointConsiderImsAndQuery()
+        public void AcceptEndpointConsiderImsAndSoftDeleteAndQuery()
         {
             System.Threading.Thread.Sleep(1000);
 
             var rawQuery = @"{""n"": ""Name2""}";
-            var result = EveClient.GetAsync<Company>(Endpoint, null, query: rawQuery).Result;
+            var result = EveClient.GetAsync<Company>(Endpoint, null, rawQuery: rawQuery).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
             Assert.AreEqual(result.Count, 1);
 
-            // POST in order to get a valid ETag
             var original3 = EveClient.PostAsync<Company>(Endpoint, new Company { Name = "Name3" }).Result;
             Assert.AreEqual(HttpStatusCode.Created, EveClient.HttpResponse.StatusCode);
 
             rawQuery = @"{""n"": ""Name3""}";
-            result = EveClient.GetAsync<Company>(Endpoint, null, query: rawQuery).Result;
+            result = EveClient.GetAsync<Company>(Endpoint, null, rawQuery: rawQuery).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
             Assert.AreEqual(result.Count, 1);
 
@@ -111,6 +110,14 @@ namespace Eve.Tests
             result = EveClient.GetAsync<Company>(Endpoint, Original2.Updated, rawQuery).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
             Assert.AreEqual(result.Count, 1);
+
+            var r = EveClient.DeleteAsync(Endpoint, original3).Result;
+            Assert.AreEqual(HttpStatusCode.NoContent, r.StatusCode);
+
+            result = EveClient.GetAsync<Company>(Endpoint, Original2.Updated, true, rawQuery).Result;
+            Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
+            Assert.AreEqual(result.Count, 1);
+            Assert.IsTrue(result[0].Deleted);
         }
 
 
