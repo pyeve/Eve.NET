@@ -64,9 +64,9 @@ namespace Eve
 	    /// <param name="uri">Endpoint URI.</param>
 	    /// <param name="etag">ETag</param>
 	    /// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
-	    /// <param name="softDeleted">Wether soft deleted documents should be included or not.</param>
+	    /// <param name="showDeleted">Wether soft deleted documents should be included or not.</param>
 	    /// <param name="rawQuery">Return only documents that match this query.</param>
-	    public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince, bool softDeleted, string rawQuery)
+	    public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince, bool showDeleted, string rawQuery)
 		{
 	        
 			if (uri == null) {
@@ -89,10 +89,12 @@ namespace Eve
                         string.Format (@"{{""{0}"": {{""$gt"": ""{1}""}}}}", LastUpdatedField, 
                             ((DateTime)ifModifiedSince).ToString ("r"));
 
-			    var softDeletePart = (!softDeleted) ? "{}" : string.Format(@"{{""{0}"": true}}", DeletedField);
                 var queryPart = @rawQuery ?? "{}";
 
-			    q.Append(string.Format(@"?where={{""$and"": [{0}, {1}, {2}]}}", imsPart, queryPart, softDeletePart));
+			    q.Append(string.Format(@"?where={{""$and"": [{0}, {1}]}}", imsPart, queryPart));
+
+			    if (showDeleted) q.Append(@"&show_deleted");
+
 				_httpResponse = await client.GetAsync (q.ToString ());
 				return _httpResponse;
 			}
