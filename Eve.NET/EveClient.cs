@@ -136,13 +136,7 @@ namespace Eve
 		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 		public async Task<T> GetAsync<T> (string resourceName, string documentId, string etag)
 		{
-
-			if (resourceName == null) {
-				throw new ArgumentNullException ("resourceName");
-			}
-			if (resourceName == string.Empty) {
-				throw new ArgumentException ("resourceName cannot be empty.");
-			}
+		    ValidateResourceName(resourceName);
 			if (documentId == null) {
 				throw new ArgumentNullException ("documentId");
 			}
@@ -238,12 +232,7 @@ namespace Eve
 		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 		public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince)
 		{
-			if (resourceName == null) {
-				throw new ArgumentNullException ("resourceName");
-			}
-			if (resourceName == string.Empty) {
-				throw new ArgumentException ("resourceName cannot be empty.");
-			}
+		    ValidateResourceName(resourceName);
 
 			_httpResponse = await GetAsync (resourceName, ifModifiedSince);
 
@@ -264,12 +253,7 @@ namespace Eve
 		/// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 		public async Task<List<T>> GetAsync<T> (string resourceName, bool softDeleted)
 		{
-			if (resourceName == null) {
-				throw new ArgumentNullException ("resourceName");
-			}
-			if (resourceName == string.Empty) {
-				throw new ArgumentException ("resourceName cannot be empty.");
-			}
+		    ValidateResourceName(resourceName);
 
 			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, null);
 
@@ -289,13 +273,8 @@ namespace Eve
 	    /// <param name="rawQuery">Only return documents matching this query.</param>
 	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 	    public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince, string rawQuery)
-		{
-			if (resourceName == null) {
-				throw new ArgumentNullException ("resourceName");
-			}
-			if (resourceName == string.Empty) {
-				throw new ArgumentException ("resourceName cannot be empty.");
-			}
+	    {
+	        ValidateResourceName(resourceName);
 
 			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, false, rawQuery);
 
@@ -316,13 +295,8 @@ namespace Eve
 	    /// <param name="rawQuery">Only return documents matching this query.</param>
 	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 	    public async Task<List<T>> GetAsync<T> (string resourceName, bool softDeleted, string rawQuery)
-		{
-			if (resourceName == null) {
-				throw new ArgumentNullException ("resourceName");
-			}
-			if (resourceName == string.Empty) {
-				throw new ArgumentException ("resourceName cannot be empty.");
-			}
+	    {
+	        ValidateResourceName(resourceName);
 
 			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, rawQuery);
 
@@ -344,13 +318,8 @@ namespace Eve
 	    /// <param name="softDeleted">Include deleted documents.</param>
 	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 	    public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince, bool softDeleted)
-		{
-			if (resourceName == null) {
-				throw new ArgumentNullException ("resourceName");
-			}
-			if (resourceName == string.Empty) {
-				throw new ArgumentException ("resourceName cannot be empty.");
-			}
+	    {
+	        ValidateResourceName(resourceName);
 
 			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, null);
 
@@ -372,13 +341,8 @@ namespace Eve
 	    /// <param name="rawQuery">Only return documents matching this query.</param>
 	    /// <typeparam name="T">The type to which the retrieved JSON should be casted.</typeparam>
 	    public async Task<List<T>> GetAsync<T> (string resourceName, DateTime? ifModifiedSince, bool softDeleted, string rawQuery)
-		{
-			if (resourceName == null) {
-				throw new ArgumentNullException ("resourceName");
-			}
-			if (resourceName == string.Empty) {
-				throw new ArgumentException ("resourceName cannot be empty.");
-			}
+	    {
+	        ValidateResourceName(resourceName);
 
 			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, rawQuery);
 
@@ -731,14 +695,23 @@ namespace Eve
 		/// <summary>
 		/// Validates the name of the resource.
 		/// </summary>
-		private void ValidateResourceName ()
+		private void ValidateResourceName (string resource = "<IDontThinkSo>")
 		{
-			if (ResourceName == null) {
+		    string field, challenge;
+		    if (resource == "<IDontThinkSo>") {
+		        challenge = ResourceName;
+		        field = "ResourceName";
+		    }
+		    else {
+                challenge = resource;
+		        field = "resourceName";
+		    }
+			if (challenge == null) {
 				// ReSharper disable once NotResolvedInText
-				throw new ArgumentNullException ("ResourceName");
+				throw new ArgumentNullException (field);
 			}
-			if (ResourceName == string.Empty) {
-				throw new ArgumentException ("ResourceName cannot be empty.");
+			if (challenge == string.Empty) {
+				throw new ArgumentException (string.Format("{0} cannot be empty.", field));
 			}
 		}
 
