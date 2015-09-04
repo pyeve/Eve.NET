@@ -56,6 +56,8 @@ namespace Eve
 
 		#region "G E T"
 
+        // TODO: DRY on GetAsync methods. Lots of them share the same code.
+
 	    /// <summary>
 	    /// Performs an asynchronous GET request on an arbitrary endpoint.
 	    /// </summary>
@@ -137,9 +139,11 @@ namespace Eve
 		public async Task<T> GetAsync<T> (string resourceName, string documentId, string etag)
 		{
 		    ValidateResourceName(resourceName);
+
 			if (documentId == null) {
 				throw new ArgumentNullException ("documentId");
 			}
+
 			_httpResponse = await GetAsync (string.Format ("{0}/{1}", resourceName, documentId), etag);
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
