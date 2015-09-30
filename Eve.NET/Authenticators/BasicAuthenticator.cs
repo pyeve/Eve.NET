@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
 
-namespace Eve
+namespace Eve.Authenticators
 {
 	public class BasicAuthenticator : IAuthenticator
 	{
