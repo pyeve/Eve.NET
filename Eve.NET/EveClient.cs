@@ -95,7 +95,7 @@ namespace Eve
 
 			    if (showDeleted) q.Append(@"&show_deleted");
 
-				_httpResponse = await client.GetAsync (q.ToString ());
+			    _httpResponse = await client.GetAsync(q.ToString()).ConfigureAwait(false);
 				return _httpResponse;
 			}
 		}
@@ -396,7 +396,7 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				Settings (client);
-				_httpResponse = await client.PostAsync (resourceName, SerializeObject (obj));
+				_httpResponse = await client.PostAsync (resourceName, SerializeObject (obj)).ConfigureAwait(false);
 				return _httpResponse;
 			}
 		}
@@ -421,7 +421,7 @@ namespace Eve
 		/// <typeparam name="T">Type of the document.</typeparam>
 		public async Task<T> PostAsync<T> (string resourceName, object obj)
 		{
-			_httpResponse = await PostAsync (resourceName, obj);
+			_httpResponse = await PostAsync (resourceName, obj).ConfigureAwait(continueOnCapturedContext:false);
 
 			switch (_httpResponse.StatusCode) {
 			case HttpStatusCode.Created:
@@ -471,7 +471,7 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				SettingsForEditing (client, obj);
-				_httpResponse = await client.PutAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj)), SerializeObject (obj));
+				_httpResponse = await client.PutAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj)), SerializeObject (obj)).ConfigureAwait(false);
 				return _httpResponse;
 			}
 		}
@@ -545,7 +545,7 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				SettingsForEditing (client, obj);
-				_httpResponse = await client.DeleteAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj)));
+				_httpResponse = await client.DeleteAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj))).ConfigureAwait(false);
 				return _httpResponse;
 			}
 		}
