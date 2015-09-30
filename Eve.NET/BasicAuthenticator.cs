@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 
 namespace Eve
 {
-	public class BasicAuthenticator
+	public class BasicAuthenticator : IAuthenticator
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasicAuthenticator"/> class.
@@ -32,7 +32,7 @@ namespace Eve
 		/// Returns an encoded authentication header which can be used to perform authenticated requests.
 		/// </summary>
 		/// <returns>The encoded authentication header.</returns>
-		internal AuthenticationHeaderValue AuthenticationHeader ()
+		public AuthenticationHeaderValue AuthenticationHeader ()
 		{
 			var s = string.Format ("{0}:{1}", UserName, Password);
 			return new AuthenticationHeaderValue ("Basic", Convert.ToBase64String (ToAscii (s)));

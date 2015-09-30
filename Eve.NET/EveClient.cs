@@ -42,14 +42,14 @@ namespace Eve
 		{
 		}
 
-		public EveClient (string baseAddress, BasicAuthenticator authenticator) : this (baseAddress)
+		public EveClient (string baseAddress, IAuthenticator authenticator) : this (baseAddress)
 		{
-			BasicAuthenticator = authenticator;
+			Authenticator = authenticator;
 		}
 
-		public EveClient (Uri baseAddress, BasicAuthenticator authenticator) : this (baseAddress)
+		public EveClient (Uri baseAddress, IAuthenticator authenticator) : this (baseAddress)
 		{
-			BasicAuthenticator = authenticator;
+			Authenticator = authenticator;
 		}
 
 		#endregion
@@ -595,7 +595,7 @@ namespace Eve
 		/// Gets or sets the authenticator.
 		/// </summary>
 		/// <value>The authenticator.</value>
-		public BasicAuthenticator BasicAuthenticator { get; set; }
+		public IAuthenticator Authenticator { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the LastUpdated field.
@@ -620,8 +620,8 @@ namespace Eve
 			client.BaseAddress = BaseAddress;
 			client.DefaultRequestHeaders.Accept.Clear ();
 			client.DefaultRequestHeaders.Accept.Add (new MediaTypeWithQualityHeaderValue ("application/json"));
-			if (BasicAuthenticator != null) {
-				client.DefaultRequestHeaders.Authorization = BasicAuthenticator.AuthenticationHeader ();
+			if (Authenticator != null) {
+				client.DefaultRequestHeaders.Authorization = Authenticator.AuthenticationHeader ();
 			}
 
 		}
