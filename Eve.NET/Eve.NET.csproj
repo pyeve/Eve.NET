@@ -43,7 +43,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authenticators\Authenticator.cs" />
+    <Compile Include="Authenticators\IAuthenticator.cs" />
     <Compile Include="Authenticators\BearerAuthenticator.cs" />
     <Compile Include="EveClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
