@@ -70,9 +70,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Eve.NET\Eve.NET.csproj">
-      <Project>{D0E09787-FEC9-4A6B-92D4-78DB328E749D}</Project>
-      <Name>Eve.NET</Name>
+    <ProjectReference Include="..\Eve.Net45\Eve.Net45.csproj">
+      <Project>{9e85bfb7-da75-4988-98fb-524f290df01c}</Project>
+      <Name>Eve.Net45</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,6 +6,7 @@ v0.1.1.0
 
 Not released yet.
 
+- Change: Portable projects replaced with platform-specific prjects.
 - New: BearerAuthenticator class adds support for Bearer token authentication.
 - Fix: use .ConfigureAndWait(false) when invoking HttpClient methods for
   improved resilience.
