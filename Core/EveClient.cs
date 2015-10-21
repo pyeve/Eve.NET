@@ -59,18 +59,18 @@ namespace Eve
 
         // TODO: DRY on GetAsync methods. Lots of them share the same code.
 
-	    /// <summary>
-	    /// Performs an asynchronous GET request on an arbitrary endpoint.
-	    /// </summary>
-	    /// <param name="uri">Endpoint URI.</param>
-	    /// <param name="etag">ETag</param>
-	    /// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
-	    /// <param name="showDeleted">Wether soft deleted documents should be included or not.</param>
-	    /// <param name="rawQuery">Return only documents that match this query.</param>
-	    public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince, bool showDeleted, string rawQuery)
-		{
+	/// <summary>
+	/// Performs an asynchronous GET request on an arbitrary endpoint.
+	/// </summary>
+	/// <param name="uri">Endpoint URI.</param>
+	/// <param name="etag">ETag</param>
+	/// <param name="ifModifiedSince">Return only documents that changed since this date.</param>
+	/// <param name="showDeleted">Wether soft deleted documents should be included or not.</param>
+	/// <param name="rawQuery">Return only documents that match this query.</param>
+	public async Task<HttpResponseMessage> GetAsync (string uri, string etag, DateTime? ifModifiedSince, bool showDeleted, string rawQuery)
+	{
 	        
-			if (uri == null) {
+	    if (uri == null) {
 				throw new ArgumentNullException ("uri");
 			}
 			ValidateBaseAddress ();
@@ -84,6 +84,8 @@ namespace Eve
 
 				var q = new System.Text.StringBuilder (uri);
 
+				// TODO don't add ims and query parts if arguments are null? Works this way, but
+				// there's probably an unneeded impact on performance (and complexity).
 			    var imsPart = 
                     ifModifiedSince == null ? 
                         "{}" : 
