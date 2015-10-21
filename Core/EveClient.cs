@@ -16,7 +16,7 @@ using System.Reflection;
 
 namespace Eve
 {
-	public class EveClient
+	public class EveClient : IDisposable
 	{
 		#region "I N I T"
 
@@ -734,5 +734,7 @@ namespace Eve
 		}
 
 		#endregion
+
+	    public void Dispose() { }
 	}
 }
