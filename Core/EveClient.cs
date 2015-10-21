@@ -12,7 +12,7 @@ using Eve.Authenticators;
 using System.Reflection;
 #endif
 
-// TODO Support for Queries
+// TODO Support for batch PostAsync method.
 
 namespace Eve
 {
