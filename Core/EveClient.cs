@@ -247,10 +247,7 @@ namespace Eve
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-			var json = await _httpResponse.Content.ReadAsStringAsync ();
-
-			var jo = JObject.Parse (json);
-			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
 		}
 
 		/// <summary>
@@ -268,10 +265,7 @@ namespace Eve
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-			var json = await _httpResponse.Content.ReadAsStringAsync ();
-
-			var jo = JObject.Parse (json);
-			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
 		}
 	    /// <summary>
 	    /// Performs an asynchronous GET request on a resource endpoint.
@@ -289,10 +283,7 @@ namespace Eve
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-			var json = await _httpResponse.Content.ReadAsStringAsync ();
-
-			var jo = JObject.Parse (json);
-			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
 		}
 
 	    /// <summary>
@@ -311,10 +302,7 @@ namespace Eve
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-			var json = await _httpResponse.Content.ReadAsStringAsync ();
-
-			var jo = JObject.Parse (json);
-			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
 		}
 
 
@@ -334,10 +322,7 @@ namespace Eve
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-			var json = await _httpResponse.Content.ReadAsStringAsync ();
-
-			var jo = JObject.Parse (json);
-			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
 		}
 
 	    /// <summary>
@@ -357,10 +342,7 @@ namespace Eve
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-			var json = await _httpResponse.Content.ReadAsStringAsync ();
-
-			var jo = JObject.Parse (json);
-			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
 		}
 
 		/// <summary>
@@ -446,6 +428,51 @@ namespace Eve
 		{
 			ValidateResourceName ();
 			return await PostAsync<T> (ResourceName, obj);
+		}
+
+		/// <summary>
+		/// Performs an asynchronous POST request on a resource endpoint. If
+		/// one of the documents is rejected by the service, the whole batch
+		/// is rejected and no document is stored.
+		/// </summary>
+		/// <returns>The objects stored.</returns>
+		/// <param name="resourceName">Resource name.</param>
+		/// <param name="objs">Objects to be stored on the service.</param>
+		/// <typeparam name="T">Type of the document.</typeparam>
+		public async Task<List<T>> PostAsync<T> (string resourceName, IEnumerable<T> objs)
+		{
+			ValidateBaseAddress ();
+			if (resourceName == null) {
+				throw new ArgumentNullException ("resourceName");
+			}
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName");
+			}
+			if (objs == null) {
+				throw new ArgumentNullException ("objs");
+			}
+
+			using (var client = new HttpClient ()) {
+				Settings (client);
+				_httpResponse = await client.PostAsync (resourceName, SerializeObject (objs)).ConfigureAwait(false);
+
+				if (_httpResponse.StatusCode != HttpStatusCode.Created)
+					return default(List<T>);
+			    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+			}
+		}
+
+		/// <summary>
+		/// Performs an asynchronous POST request on a resource endpoint. If
+		/// one or more document fail validation and are rejected, the whole
+		/// batch is rejected and no document is stored on the service.
+		/// </summary>
+		/// <returns>An instance of the document.</returns>
+		/// <param name="objs">Object to be stored on the service.</param>
+		/// <typeparam name="T">Type of the document.</typeparam>
+		public async Task<List<T>> PostAsync<T> (IEnumerable<T> objs)
+		{
+			return await PostAsync (ResourceName, objs).ConfigureAwait(false);
 		}
 
 		#endregion
@@ -737,6 +764,12 @@ namespace Eve
 
 		#endregion
 
+	    private async Task<List<T>> ParseJsonAsListOf<T>(HttpContent content)
+	    {
+			var json = await content.ReadAsStringAsync ();
+			var jo = JObject.Parse (json);
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+	    }
 	    public void Dispose() { }
 	}
 }

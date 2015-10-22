@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using System.Net;
@@ -77,6 +78,30 @@ namespace Eve.Tests
         public async Task ObjArgumentNullException()
         {
             await EveClient.PostAsync("resource", null);
+        }
+        [Test]
+        public async Task BulkPost()
+        {
+			var c1 = new Company {Name = "c1"};
+			var c2 = new Company {Name = "c2"};
+            var objs = new List<Company> { c1, c2 };
+
+            var retObjs = await EveClient.PostAsync(Endpoint, objs);
+
+            Assert.That(retObjs.Count, Is.EqualTo(2));
+            ValidateReturnedObject(retObjs[0], c1);
+            ValidateReturnedObject(retObjs[1], c2);
+        }
+        [Test]
+        public async Task BulkPostValidationException()
+        {
+			var c1 = new Company();
+			var c2 = new Company {Name = "c2"};
+            var objs = new List<Company> { c1, c2 };
+
+            var retObjs = await EveClient.PostAsync(Endpoint, objs);
+
+            Assert.That(retObjs, Is.Null);
         }
     }
 }

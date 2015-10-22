@@ -114,9 +114,9 @@ namespace Eve.Tests
             var r = EveClient.DeleteAsync(Endpoint, original3).Result;
             Assert.AreEqual(HttpStatusCode.NoContent, r.StatusCode);
 
-            result = EveClient.GetAsync<Company>(Endpoint, Original2.Updated, true, rawQuery).Result;
+            result = EveClient.GetAsync<Company>(Endpoint, Original2.Updated, true).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
-            Assert.AreEqual(result.Count, 1);
+            Assert.AreEqual(1, result.Count);
             Assert.IsTrue(result[0].Deleted);
         }
 
