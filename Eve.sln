@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Net45", "Eve.Net45\Eve.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Tests", "Eve.Tests\Eve.Tests.csproj", "{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.iOS", "Eve.iOS\Eve.iOS.csproj", "{C932BF3E-ECDD-4A3C-9BA2-10D92A6C3143}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C932BF3E-ECDD-4A3C-9BA2-10D92A6C3143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C932BF3E-ECDD-4A3C-9BA2-10D92A6C3143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C932BF3E-ECDD-4A3C-9BA2-10D92A6C3143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C932BF3E-ECDD-4A3C-9BA2-10D92A6C3143}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
