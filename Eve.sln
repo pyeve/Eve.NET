@@ -19,7 +19,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Tests", "Eve.Tests\Eve.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.iOS", "Eve.iOS\Eve.iOS.csproj", "{C932BF3E-ECDD-4A3C-9BA2-10D92A6C3143}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Eve.Core", "Eve.Core\Eve.Core.shproj", "{39C8A2DD-D004-445B-8FEC-6F1A65B15C94}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Eve.Core\Eve.Core.projitems*{39c8a2dd-d004-445b-8fec-6f1a65b15c94}*SharedItemsImports = 13
+		Eve.Core\Eve.Core.projitems*{43aff1e2-c4dc-4737-963b-7ce26a559baf}*SharedItemsImports = 4
+		Eve.Core\Eve.Core.projitems*{9e85bfb7-da75-4988-98fb-524f290df01c}*SharedItemsImports = 4
+		Eve.Core\Eve.Core.projitems*{c932bf3e-ecdd-4a3c-9ba2-10d92a6c3143}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

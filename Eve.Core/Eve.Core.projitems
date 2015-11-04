@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>39c8a2dd-d004-445b-8fec-6f1a65b15c94</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Eve.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BasicAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BearerAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EveClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EveContractResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RemoteAttribute.cs" />
+  </ItemGroup>
+</Project>

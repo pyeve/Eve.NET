@@ -34,24 +34,6 @@
     <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Core\BasicAuthenticator.cs">
-      <Link>BasicAuthenticator.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\BearerAuthenticator.cs">
-      <Link>BearerAuthenticator.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\EveClient.cs">
-      <Link>EveClient.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\EveContractResolver.cs">
-      <Link>EveContractResolver.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\IAuthenticator.cs">
-      <Link>IAuthenticator.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\RemoteAttribute.cs">
-      <Link>RemoteAttribute.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,5 +50,6 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
+  <Import Project="..\Eve.Core\Eve.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

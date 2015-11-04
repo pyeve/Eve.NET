@@ -90,24 +90,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Core\BasicAuthenticator.cs">
-      <Link>BasicAuthenticator.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\BearerAuthenticator.cs">
-      <Link>BearerAuthenticator.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\EveClient.cs">
-      <Link>EveClient.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\EveContractResolver.cs">
-      <Link>EveContractResolver.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\IAuthenticator.cs">
-      <Link>IAuthenticator.cs</Link>
-    </Compile>
-    <Compile Include="..\Core\RemoteAttribute.cs">
-      <Link>RemoteAttribute.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +97,7 @@
     <None Include="eve.net.snk" />
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="..\Eve.Core\Eve.Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
