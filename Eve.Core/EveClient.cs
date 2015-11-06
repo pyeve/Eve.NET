@@ -18,7 +18,7 @@ namespace Eve
 {
 	public class EveClient : IDisposable
 	{
-#region "I N I T"
+		#region "I N I T"
 
 		private HttpResponseMessage _httpResponse;
 
@@ -53,10 +53,9 @@ namespace Eve
 			Authenticator = authenticator;
 		}
 
-#endregion
+		#endregion
 
-
-#region "G E T"
+		#region "G E T"
 
         // TODO: DRY on GetAsync methods. Lots of them share the same code.
 
@@ -76,7 +75,7 @@ namespace Eve
 			}
 			ValidateBaseAddress ();
 
-			using (var client = GetHttpClient()) {
+			using (var client = new HttpClient ()) {
 				Settings (client);
 
 				if (etag != null) {
@@ -357,9 +356,9 @@ namespace Eve
 			return await GetAsync<T> (resourceName, ifModifiedSince: null);
 		}
 
-#endregion
+		#endregion
 
-#region "P O S T"
+		#region "P O S T"
 
 		/// <summary>
 		/// Performs an asynchronous POST request on a resource endpoint.
@@ -380,7 +379,7 @@ namespace Eve
 				throw new ArgumentNullException ("obj");
 			}
 
-			using (var client = GetHttpClient()) {
+			using (var client = new HttpClient ()) {
 				Settings (client);
 				_httpResponse = await client.PostAsync (resourceName, SerializeObject (obj)).ConfigureAwait(false);
 				return _httpResponse;
@@ -453,7 +452,7 @@ namespace Eve
 				throw new ArgumentNullException ("objs");
 			}
 
-			using (var client = GetHttpClient()) {
+			using (var client = new HttpClient ()) {
 				Settings (client);
 				_httpResponse = await client.PostAsync (resourceName, SerializeObject (objs)).ConfigureAwait(false);
 
@@ -476,9 +475,9 @@ namespace Eve
 			return await PostAsync (ResourceName, objs).ConfigureAwait(false);
 		}
 
-#endregion
+		#endregion
 
-#region "P U T"
+		#region "P U T"
 
 		/// <summary>
 		/// Performs an asynchronous PUT request on a document endpoint.
@@ -500,7 +499,7 @@ namespace Eve
 				throw new ArgumentNullException ("obj");
 			}
 
-			using (var client = GetHttpClient()) {
+			using (var client = new HttpClient ()) {
 				SettingsForEditing (client, obj);
 				_httpResponse = await client.PutAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj)), SerializeObject (obj)).ConfigureAwait(false);
 				return _httpResponse;
@@ -550,9 +549,9 @@ namespace Eve
 			return await PutAsync<T> (ResourceName, obj);
 		}
 
-#endregion
+		#endregion
 
-#region "D E L E T E"
+		#region "D E L E T E"
 
 		/// <summary>
 		/// Performs an asynchronous DELETE request on a document endpoint.
@@ -574,7 +573,7 @@ namespace Eve
 				throw new ArgumentNullException ("obj");
 			}
 
-			using (var client = GetHttpClient()) {
+			using (var client = new HttpClient ()) {
 				SettingsForEditing (client, obj);
 				_httpResponse = await client.DeleteAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj))).ConfigureAwait(false);
 				return _httpResponse;
@@ -593,9 +592,9 @@ namespace Eve
 			return _httpResponse;
 		}
 
-#endregion
+		#endregion
 
-#region "P R O P R I E R T I E S"
+		#region "P R O P R I E R T I E S"
 
 		/// <summary>
 		/// Gets or sets the remote service base address.
@@ -637,18 +636,9 @@ namespace Eve
 		/// Gets or sets the name of the Deleted field.
 		/// </summary>
 		public string DeletedField { get; set; }
-#endregion
+		#endregion
 
-#region "S U P P O R T"
-
-		/// <summary>
-        /// Returns an HttpClient instance. Platform specific implementation can return a specialised alternative (like ModernHttpClient).
-        /// </summary>
-        /// <returns></returns>
-	    protected virtual HttpClient GetHttpClient()
-	    {
-			return new HttpClient();
-        }
+		#region "S U P P O R T"
 
 		/// <summary>
 		/// Sets the default client settings needed by GET and POST request methods.
@@ -720,13 +710,13 @@ namespace Eve
 		/// <param name="metaField">Meta field to be returned.</param>
 		private static string GetRemoteMetaFieldValue (object obj, Meta metaField)
 		{
-#if PROFILE7
+			#if PROFILE7
 			var pInfo = obj.GetType ().GetRuntimeProperties ().Where (
 				            p => p.IsDefined (typeof(RemoteAttribute), true)).ToList ();
-#else
+			#else
 			var pInfo = obj.GetType ().GetProperties ().Where (
 				            p => p.IsDefined (typeof(RemoteAttribute), true)).ToList ();
-#endif
+			#endif
 
 			foreach (var p in pInfo) {
 				var attr = (RemoteAttribute)p.GetCustomAttributes (typeof(RemoteAttribute), true).FirstOrDefault ();
@@ -772,7 +762,7 @@ namespace Eve
 			}
 		}
 
-#endregion
+		#endregion
 
 	    private async Task<List<T>> ParseJsonAsListOf<T>(HttpContent content)
 	    {
