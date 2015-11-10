@@ -16,8 +16,6 @@ Not released yet.
   improved resilience.
 - Fix: If-Modified-Since was not respected in GetAsync.
 
-- Change: Portable projects replaced with platform-specific prjects.
-
 v0.1.0.1
 ========
 

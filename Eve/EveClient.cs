@@ -12,8 +12,6 @@ using Eve.Authenticators;
 using System.Reflection;
 #endif
 
-// TODO Support for batch PostAsync method.
-
 namespace Eve
 {
 	public class EveClient : IDisposable
