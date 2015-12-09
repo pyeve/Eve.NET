@@ -6,6 +6,8 @@ v0.1.1.0
 
 Not released yet.
 
+- New: .NET4 PCL
+- New: .NET45 PCL
 - New: Support for bulk PostAsync methods.
 - New: BearerAuthenticator class adds support for Bearer token authentication.
 - New: support for including deleted documents in queries. Requires SOFT_DELETE

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Eve.Authenticators;
-#if PROFILE7
+#if NET45
 using System.Reflection;
 #endif
 
@@ -708,7 +708,7 @@ namespace Eve
 		/// <param name="metaField">Meta field to be returned.</param>
 		private static string GetRemoteMetaFieldValue (object obj, Meta metaField)
 		{
-			#if PROFILE7
+			#if NET45
 			var pInfo = obj.GetType ().GetRuntimeProperties ().Where (
 				            p => p.IsDefined (typeof(RemoteAttribute), true)).ToList ();
 			#else

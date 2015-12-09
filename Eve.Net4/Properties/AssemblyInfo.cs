@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Eve")]
+[assembly: AssemblyTitle("Eve.Net4")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CIR 2000")]
-[assembly: AssemblyProduct("Eve")]
+[assembly: AssemblyProduct("Eve.Net4")]
 [assembly: AssemblyCopyright("Copyright © CIR 2000 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

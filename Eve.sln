@@ -11,27 +11,52 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Tests", "Eve.Tests\Eve.Tests.csproj", "{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Eve.Core", "Eve.Core\Eve.Core.shproj", "{78CDBF73-3153-40D8-A934-A30772E95E7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve", "Eve\Eve.csproj", "{DD88D007-AD10-470D-9C89-AA8EE39857D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve", "Eve\Eve.csproj", "{4749087D-FA43-420B-9324-5D53F7BF6567}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Net4", "Eve.Net4\Eve.Net4.csproj", "{C5DEAD7A-1511-4516-9334-420CE21D3DC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{147EC142-D38D-451C-B3FA-560740AEDF94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Tests", "Tests\Eve.Tests\Eve.Tests.csproj", "{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eve.Tests.Net4", "Tests\Eve.Tests.Net4\Eve.Tests.Net4.csproj", "{A3E83015-494E-4767-B8D6-DDE6805BF31D}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Eve.Core\Eve.Core.projitems*{c5dead7a-1511-4516-9334-420ce21d3dc8}*SharedItemsImports = 4
+		Eve.Core\Eve.Core.projitems*{4749087d-fa43-420b-9324-5d53f7bf6567}*SharedItemsImports = 4
+		Eve.Core\Eve.Core.projitems*{78cdbf73-3153-40d8-a934-a30772e95e7a}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4749087D-FA43-420B-9324-5D53F7BF6567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4749087D-FA43-420B-9324-5D53F7BF6567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4749087D-FA43-420B-9324-5D53F7BF6567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4749087D-FA43-420B-9324-5D53F7BF6567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5DEAD7A-1511-4516-9334-420CE21D3DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5DEAD7A-1511-4516-9334-420CE21D3DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5DEAD7A-1511-4516-9334-420CE21D3DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5DEAD7A-1511-4516-9334-420CE21D3DC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD88D007-AD10-470D-9C89-AA8EE39857D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD88D007-AD10-470D-9C89-AA8EE39857D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD88D007-AD10-470D-9C89-AA8EE39857D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD88D007-AD10-470D-9C89-AA8EE39857D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E83015-494E-4767-B8D6-DDE6805BF31D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E83015-494E-4767-B8D6-DDE6805BF31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E83015-494E-4767-B8D6-DDE6805BF31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E83015-494E-4767-B8D6-DDE6805BF31D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{30BD6CB4-B66D-44DB-AAFB-B4F5B90853C3} = {147EC142-D38D-451C-B3FA-560740AEDF94}
+		{A3E83015-494E-4767-B8D6-DDE6805BF31D} = {147EC142-D38D-451C-B3FA-560740AEDF94}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Eve.NET\Eve.NET.csproj
