@@ -590,6 +590,46 @@ namespace Eve
 			return _httpResponse;
 		}
 
+		/// <summary>
+		/// Performs an asynchronous DELETE request on a resource endpoint
+		/// </summary>
+		/// <returns>The raw response returned by the service.</returns>
+		/// <remarks>Use with caution as this is likely to delete all endpoint data.</remarks>
+		public async Task<HttpResponseMessage> DeleteAsync()
+		{
+			ValidateBaseAddress ();
+		    ValidateResourceName();
+
+			using (var client = new HttpClient ()) {
+				Settings(client);
+				_httpResponse = await client.DeleteAsync (ResourceName).ConfigureAwait(false);
+				return _httpResponse;
+			}
+		}
+
+		/// <summary>
+		/// Performs an asynchronous DELETE request on a resource endpoint
+		/// </summary>
+		/// <returns>The raw response returned by the service.</returns>
+		/// <param name="resourceName">Resource endpoint.</param>
+		/// <remarks>Use with caution as this is likely to delete all endpoint data.</remarks>
+		public async Task<HttpResponseMessage> DeleteAsync(string resourceName)
+		{
+			ValidateBaseAddress ();
+			if (resourceName == null) {
+				throw new ArgumentNullException ("resourceName");
+			}
+			if (resourceName == string.Empty) {
+				throw new ArgumentException ("resourceName");
+			}
+
+			using (var client = new HttpClient ()) {
+				Settings(client);
+				_httpResponse = await client.DeleteAsync (resourceName).ConfigureAwait(false);
+				return _httpResponse;
+			}
+		}
+
 		#endregion
 
 		#region "P R O P R I E R T I E S"

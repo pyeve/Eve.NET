@@ -45,6 +45,30 @@ namespace Eve.Tests
 		}
 
 		[Test]
+		public void DeleteEndpointContent ()
+		{
+			var message = EveClient.DeleteAsync (Endpoint).Result;
+			Assert.AreEqual (HttpStatusCode.NoContent, message.StatusCode);
+
+			// confirm that item has been deleted on remote
+			var companies = EveClient.GetAsync<Company>(Endpoint).Result;
+			Assert.AreEqual (HttpStatusCode.NoContent, message.StatusCode);
+			Assert.AreEqual (0, companies.Count);
+		}
+		[Test]
+		public void DeleteEndpointContentUsingResourceName ()
+		{
+			EveClient.ResourceName = Endpoint;
+			var message = EveClient.DeleteAsync ().Result;
+			Assert.AreEqual (HttpStatusCode.NoContent, message.StatusCode);
+
+			// confirm that item has been deleted on remote
+			var companies = EveClient.GetAsync<Company>(Endpoint).Result;
+			Assert.AreEqual (HttpStatusCode.NoContent, message.StatusCode);
+			Assert.AreEqual (0, companies.Count);
+		}
+
+		[Test]
 		[ExpectedException (typeof(ArgumentNullException), ExpectedMessage = "BaseAddress", MatchType = MessageMatch.Contains)]
 		public async Task BaseAddressPropertyNullException ()
 		{
@@ -88,15 +112,5 @@ namespace Eve.Tests
 		{
 			await EveClient.DeleteAsync (Original);
 		}
-
-
-		[Test]
-		[ExpectedException (typeof(ArgumentNullException), ExpectedMessage = "obj", MatchType = MessageMatch.Contains)]
-		public async Task ObjArgumentNullExceptionAlt ()
-		{
-			EveClient.ResourceName = "resource";
-			await EveClient.DeleteAsync (null);
-		}
-
 	}
 }
