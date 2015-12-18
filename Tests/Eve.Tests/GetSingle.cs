@@ -83,6 +83,13 @@ namespace Eve.Tests
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="DocumentId",MatchType= MessageMatch.Contains)]
+        public async Task DocumentIdNameNullException()
+        {
+            await EveClient.GetAsync<Company>(null, new Company());
+        }
+
+        [Test]
         [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="BaseAddress",MatchType= MessageMatch.Contains)]
         public async Task BaseAddressNullException()
         {
@@ -108,14 +115,14 @@ namespace Eve.Tests
         [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="resourceName", MatchType = MessageMatch.Contains)]
         public async Task ResourceNameArgumentNullException()
         {
-            await EveClient.GetAsync<Company>(null, new Company());
+            await EveClient.GetAsync<Company>(null, new Company {UniqueId="unique"});
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentException), ExpectedMessage="resourceName", MatchType = MessageMatch.Contains)]
         public async Task ResourceNameArgumentException()
         {
-            await EveClient.GetAsync<Company>(string.Empty, new Company());
+            await EveClient.GetAsync<Company>(string.Empty, new Company {UniqueId="unique"});
         }
 
         [Test]
@@ -124,6 +131,12 @@ namespace Eve.Tests
         {
             var rc = new EveClient(Service);
             await rc.GetAsync<Company>("123", obj: null);
+        }
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="ETag",MatchType= MessageMatch.Contains)]
+        public async Task ETagNullException()
+        {
+            await EveClient.PutAsync<Company>("123", new Company());
         }
     }
 }

@@ -703,7 +703,12 @@ namespace Eve
 		private void SettingsForEditing (HttpClient client, object obj)
 		{
 			Settings (client);
-			client.DefaultRequestHeaders.TryAddWithoutValidation ("If-Match", GetETag (obj));
+
+		    var etag = GetETag(obj);
+		    if (etag == null)
+		        throw new ArgumentNullException("ETag");
+
+			client.DefaultRequestHeaders.TryAddWithoutValidation ("If-Match", etag);
 		}
 
 		/// <summary>
@@ -727,7 +732,12 @@ namespace Eve
 		/// <param name="obj">The object to be sent to the service.</param>
 		private static string GetDocumentId (object obj)
 		{
-			return GetRemoteMetaFieldValue (obj, Meta.DocumentId);
+			var id = GetRemoteMetaFieldValue (obj, Meta.DocumentId);
+
+		    if (id == null)
+		        throw new ArgumentNullException("DocumentId");
+
+            return id;
 		}
 
 		/// <summary>
