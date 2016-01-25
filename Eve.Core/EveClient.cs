@@ -296,7 +296,7 @@ namespace Eve
 	    {
 	        ValidateResourceName(resourceName);
 
-			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, rawQuery);
+			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, rawQuery).ConfigureAwait(false);
 
 			if (_httpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
