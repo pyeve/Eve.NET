@@ -6,6 +6,7 @@ v0.1.1.0
 
 Not released yet.
 
+- New: Automatically serialize properties names to lower-case. 
 - New: DeleteAsync() deletes all contents from ResourceName endpoint.
 - New: DeleteAsync(resourceName) deletes all contents from resourceName endpoint.
 - New: .NET4 PCL
@@ -16,6 +17,7 @@ Not released yet.
   feature to be enabled on the server.
 - New: support for raw queries.
 
+- Fix: properly serialize DateTime properties to match Eve's RFC1123 format.
 - Fix: DeleteAsync(obj) with obj's Meta.DocumentId at null would request a resource instead of a document delete.
 - Fix: Edit methods still try to execute when Meta.ETag field is null. 
 - Fix: edit methods where obj's Meta.ETag is could request the whole contents delete.

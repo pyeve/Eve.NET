@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -718,8 +719,12 @@ namespace Eve
 		/// <param name="obj">The object to be serialized.</param>
 		private static StringContent SerializeObject (object obj)
 		{
-			var settings = new JsonSerializerSettings { ContractResolver = new EveContractResolver () };
-			var s = JsonConvert.SerializeObject (obj, settings);
+		    var settings = new JsonSerializerSettings
+		    {
+		        ContractResolver = new EveContractResolver(),
+		        DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.RFC1123Pattern
+		    };
+		    var s = JsonConvert.SerializeObject (obj,  settings);
 			var content = new StringContent (s);
 			content.Headers.ContentType = new MediaTypeHeaderValue ("application/json");
 			return content;

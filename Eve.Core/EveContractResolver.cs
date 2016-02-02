@@ -22,5 +22,9 @@ namespace Eve
 
 			return property;
 		}
+		protected override string ResolvePropertyName(string propertyName)
+		{
+			return propertyName.ToLower();
+		}
 	}
 }
