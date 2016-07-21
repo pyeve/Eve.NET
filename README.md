@@ -7,8 +7,8 @@ provide the best possible Eve experience on the .NET platform.
 Cross platform
 --------------
 Written and maintained by the same author of the Eve Framework, Eve.NET is 
-delivered as a portable library (PCL) which runs seamlessly on .NET4, Mono, 
-Xamarin.iOS, Xamarin.Android, Windows Phone 8 and Windows 8. We use Eve.NET 
+delivered as a portable library (PCL) which runs seamlessly on Xamarin.iOS, 
+Xamarin.Android, Windows Phone 8.1 and Windows 8, .NET45. We use Eve.NET 
 internally to power our iOS, Web and Windows applications.
 
 Usage
@@ -168,7 +168,7 @@ Eve.NET is on [NuGet][9]. Run the following command on the Package Manager Conso
 ```
 PM> Install-Package Eve.NET
 ```
-Or install via the NuGet Package Manager in Visual Studio. If you are on Xamarin Studio make sure the `Show pre-release packages` option is enabled when using the `Add Package` UI or you will get an error that it can't resolve Async dependencies (neeed in order to make Async available on .NET4).
+Or install via the NuGet Package Manager in Visual/Xamarin Studio. 
 
 Running the tests
 -----------------

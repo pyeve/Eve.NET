@@ -9,8 +9,6 @@ Not released yet.
 - New: Automatically serialize properties names to lower-case. 
 - New: DeleteAsync() deletes all contents from ResourceName endpoint.
 - New: DeleteAsync(resourceName) deletes all contents from resourceName endpoint.
-- New: .NET4 PCL
-- New: .NET45 PCL
 - New: Support for bulk PostAsync methods.
 - New: BearerAuthenticator class adds support for Bearer token authentication.
 - New: support for including deleted documents in queries. Requires SOFT_DELETE
@@ -24,6 +22,9 @@ Not released yet.
 - Fix: use .ConfigureAndWait(false) when invoking HttpClient methods for
   improved resilience.
 - Fix: If-Modified-Since was not respected in GetAsync.
+
+- Change: switch from Profile7 to Profile259
+- Change: drop support for .NET4
 
 v0.1.0.1
 ========

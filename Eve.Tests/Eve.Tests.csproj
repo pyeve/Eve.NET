@@ -75,8 +75,8 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Eve\Eve.csproj">
-      <Project>{4749087d-fa43-420b-9324-5d53f7bf6567}</Project>
+    <ProjectReference Include="..\Eve\Eve.csproj">
+      <Project>{dd88d007-ad10-470d-9c89-aa8ee39857d0}</Project>
       <Name>Eve</Name>
     </ProjectReference>
   </ItemGroup>
