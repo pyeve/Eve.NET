@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Eve.Authenticators;
-#if NET45
 using System.Reflection;
-#endif
 
 namespace Eve
 {
@@ -763,13 +761,8 @@ namespace Eve
 		/// <param name="metaField">Meta field to be returned.</param>
 		private static string GetRemoteMetaFieldValue (object obj, Meta metaField)
 		{
-			#if NET45
 			var pInfo = obj.GetType ().GetRuntimeProperties ().Where (
 				            p => p.IsDefined (typeof(RemoteAttribute), true)).ToList ();
-			#else
-			var pInfo = obj.GetType ().GetProperties ().Where (
-				            p => p.IsDefined (typeof(RemoteAttribute), true)).ToList ();
-			#endif
 
 			foreach (var p in pInfo) {
 				var attr = (RemoteAttribute)p.GetCustomAttributes (typeof(RemoteAttribute), true).FirstOrDefault ();
