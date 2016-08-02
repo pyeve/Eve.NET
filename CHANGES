@@ -25,6 +25,7 @@ Not released yet.
 
 - Change: switch from Profile7 to Profile259
 - Change: drop support for .NET4
+- Change: use the 'EveTestServer' environment variable to run the test suite (or use http://10.0.2.2:5000 as default)
 
 v0.1.0.1
 ========

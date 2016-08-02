@@ -8,40 +8,35 @@ namespace Eve.Tests
 {
 	public class MethodsBase
 	{
-		// In order to run the test suite you should clone the evenet-testbed repo:
-		// https://github.com/nicolaiarocci/Eve.NET-testbed
-
-		// Run the webservice and update the Service const below accordingly. Alternatively
-		// you can run the tests againsts a free test instance which is running on the web
-		// (see below).
-
-		#if (VM)
-        // VIRTUALBOX IMAGE
-        // In my case I am running Windows in a VirtualBox VM so in order to access the 
-        // OSX Host 'localhost' where a local instance of the REST API is running, I use 
-        // the standard 10.0.2.2:5000 uri.
-        internal const string Service = "http://10.0.2.2:5000/";
-
-#elif (TESTBED)
-        // REMOTE INSTANCE
-        // If you don't have a local Eve.NET-testbed instance then you can opt to run the 
-        // tests against the free instance which is available online. Tests will run much 
-        // slower though and please, don't overuse it: the webservice runs on very limited 
-        // resources and we want everyone to keep enjoying it.
-        internal const string Service = "http://evenet-testbed.herokuapp.com";
-
-#else
-		// LOCAL INSTANCE
-		internal const string Service = "http://localhost:5000/";
-		#endif
 
 		internal const string Endpoint = "companies";
 		internal EveClient EveClient;
 		internal Company Original;
+        internal string Service;
 
 		[SetUp]
 		public void Init ()
 		{
+            // In order to run the test suite you need an instance of Eve.NET-testbed running.
+            // This is a python application, and you have a few options to run it.
+
+            // 1) Clone the repo at: https://github.com/nicolaiarocci/Eve.NET-testbed, then
+            // run the webservice. By default it will run on "http://localhost:5000", so you can 
+            // set the EveTestServer environment variable accordingly.
+
+            // In my case, I am running Windows in a VirtualBox VM so in order to access the 
+            // OSX Host 'localhost', where a local instance of the REST API is running, I use 
+            // the standard "http://10.0.2.2:5000" address. This is the default when no envvar 
+            // has been set.
+
+            // 2) If you don't have or don't want to run a local Eve.NET-testbed instance, then 
+            // you can run the tests against a remote testbed instance, which is available online. 
+            // Tests will be  slower and please, don't overuse this feature: the webservice runs on 
+            // very limited resources (for free), and we want everyone to keep enjoying it. To hit
+            // the remote test server simply set 'EveTestServer' envvar to "http://evenet-testbed.herokuapp.com";
+
+            Service = Environment.GetEnvironmentVariable("EveTestServer") ?? "http://10.0.2.2:5000";
+
 			// Make sure remote remote endpoint is completely empty.
 			// We use the standard HttpClient for this (we aren't testing anything yet).
 			var hc = new HttpClient { BaseAddress = new Uri (Service) };
