@@ -158,7 +158,6 @@ $RECYCLE.BIN/
 
 # NuGet
 NuGet.exe
-*.nupkg
 
 # Xamarin Studio
 *.userprefs
