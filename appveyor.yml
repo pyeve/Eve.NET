@@ -1,0 +1,7 @@
+version: 1.0.{build}
+environment:
+  EveTestServer: http://evenet-testbed.herokuapp.com/
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: minimal
