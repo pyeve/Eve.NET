@@ -1,4 +1,4 @@
-Eve.NET
+Eve.NET [![Build status](https://ci.appveyor.com/api/projects/status/gvd1i4565flupru6?svg=true)](https://ci.appveyor.com/project/nicolaiarocci/eve-net)
 =======
 Eve.NET is a simple HTTP and REST client for Web Services powered by the [Eve 
 Framework][1]. It leverages both `System.Net.HttpClient` and `Json.NET` to 
