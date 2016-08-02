@@ -10,7 +10,6 @@ deploy:
   api_key:
     secure: n79bIyukFqGL7AjtPzsYj/4BNjkyvmT7s2lsUIxjgG0R3VB2K7jJBjE6zltrUEJT
   skip_symbols: true
-  artifact: /.*\.nupkg/
   on:
     branch: master
     appveyor_repo_tag: true
