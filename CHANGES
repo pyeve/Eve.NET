@@ -4,7 +4,7 @@ Changelog
 v0.2.0.0
 ========
 
-Not released yet.
+Released on August 2, 2016
 
 - New: Automatically serialize properties names to lower-case. 
 - New: DeleteAsync() deletes all contents from ResourceName endpoint.
