@@ -186,9 +186,9 @@ distributed under the [BSD license][4].
 [1]: http://python-eve.org
 [2]: http://nicolaiarocci.com
 [3]: http://gestionaleamica.com
-[4]: https://github.com/nicolaiarocci/Eve.NET/blob/master/LICENSE.txt
+[4]: https://github.com/pyeve/Eve.NET/blob/master/LICENSE.txt
 [5]: http://msdn.microsoft.com/en-us/library/system.net.http.httpclient%28v=vs.118%29.aspx
 [6]: http://james.newtonking.com/json
-[7]: https://github.com/nicolaiarocci/Eve.NET-testbed
-[8]: https://github.com/nicolaiarocci/Eve.NET/blob/master/Eve.Client.Tests/MethodsBase.cs#L13-L31
+[7]: https://github.com/pyeve/Eve.NET-testbed
+[8]: https://github.com/pyeve/Eve.NET/blob/master/Eve.Client.Tests/MethodsBase.cs#L13-L31
 [9]: https://www.nuget.org/packages/Eve.NET/
