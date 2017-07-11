@@ -6,10 +6,8 @@ provide the best possible Eve experience on the .NET platform.
 
 Cross platform
 --------------
-Written and maintained by the same author of the Eve Framework, Eve.NET is 
-delivered as a portable library (PCL) which runs seamlessly on Xamarin.iOS, 
-Xamarin.Android, Windows Phone 8.1 and Windows 8, .NET45. We use Eve.NET 
-internally to power our iOS, Web and Windows applications.
+Eve.NET is delivered as a .NET Standard 1.1 package, which makes it compatible 
+with a [wide range][10] of operating systems and .NET Platforms.
 
 Usage
 -----
@@ -192,3 +190,4 @@ distributed under the [BSD license][4].
 [7]: https://github.com/pyeve/Eve.NET-testbed
 [8]: https://github.com/pyeve/Eve.NET/blob/master/Eve.Client.Tests/MethodsBase.cs#L13-L31
 [9]: https://www.nuget.org/packages/Eve.NET/
+[10]: https://docs.microsoft.com/en-us/dotnet/standard/net-standard
