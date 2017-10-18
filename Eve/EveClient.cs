@@ -15,11 +15,10 @@ namespace Eve
 {
 	public class EveClient : IDisposable
 	{
-		#region "I N I T"
 
-		private HttpResponseMessage _httpResponse;
+        #region "I N I T"
 
-		public EveClient ()
+        public EveClient ()
 		{
 			// don't serialize null values.
 			JsonConvert.DefaultSettings = () => new JsonSerializerSettings { 
@@ -28,6 +27,7 @@ namespace Eve
 
 			LastUpdatedField = "_updated";
 		    DeletedField = "_deleted";
+            CustomHeaders = new Dictionary<string, string>();
 		}
 
 		public EveClient (Uri baseAddress) : this ()
@@ -95,8 +95,8 @@ namespace Eve
 
 			    if (showDeleted) q.Append(@"&show_deleted");
 
-			    _httpResponse = await client.GetAsync(q.ToString()).ConfigureAwait(false);
-				return _httpResponse;
+			    HttpResponse = await client.GetAsync(q.ToString()).ConfigureAwait(false);
+				return HttpResponse;
 			}
 		}
 
@@ -146,11 +146,11 @@ namespace Eve
 				throw new ArgumentNullException ("documentId");
 			}
 
-			_httpResponse = await GetAsync (string.Format ("{0}/{1}", resourceName, documentId), etag);
+			HttpResponse = await GetAsync (string.Format ("{0}/{1}", resourceName, documentId), etag);
 
-			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(T);
-			var json = await _httpResponse.Content.ReadAsStringAsync ();
+			var json = await HttpResponse.Content.ReadAsStringAsync ();
 			var obj = JsonConvert.DeserializeObject<T> (json);
 			return obj;
 		}
@@ -194,7 +194,7 @@ namespace Eve
 
 			var retObj = await GetAsync<T> (resourceName, GetDocumentId (obj), GetETag (obj));
 
-			return _httpResponse.StatusCode == HttpStatusCode.NotModified ? (T)obj : retObj;
+			return HttpResponse.StatusCode == HttpStatusCode.NotModified ? (T)obj : retObj;
 		}
 
 		/// <summary>
@@ -240,11 +240,11 @@ namespace Eve
 		{
 		    ValidateResourceName(resourceName);
 
-			_httpResponse = await GetAsync (resourceName, ifModifiedSince);
+			HttpResponse = await GetAsync (resourceName, ifModifiedSince);
 
-			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+		    return await ParseJsonAsListOf<T>(HttpResponse.Content);
 		}
 
 		/// <summary>
@@ -258,11 +258,11 @@ namespace Eve
 		{
 		    ValidateResourceName(resourceName);
 
-			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, null);
+			HttpResponse = await GetAsync (resourceName, null, null, softDeleted, null);
 
-			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+		    return await ParseJsonAsListOf<T>(HttpResponse.Content);
 		}
 	    /// <summary>
 	    /// Performs an asynchronous GET request on a resource endpoint.
@@ -276,11 +276,11 @@ namespace Eve
 	    {
 	        ValidateResourceName(resourceName);
 
-			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, false, rawQuery);
+			HttpResponse = await GetAsync (resourceName, null, ifModifiedSince, false, rawQuery);
 
-			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+		    return await ParseJsonAsListOf<T>(HttpResponse.Content);
 		}
 
 	    /// <summary>
@@ -295,11 +295,11 @@ namespace Eve
 	    {
 	        ValidateResourceName(resourceName);
 
-			_httpResponse = await GetAsync (resourceName, null, null, softDeleted, rawQuery).ConfigureAwait(false);
+			HttpResponse = await GetAsync (resourceName, null, null, softDeleted, rawQuery).ConfigureAwait(false);
 
-			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+		    return await ParseJsonAsListOf<T>(HttpResponse.Content);
 		}
 
 
@@ -315,11 +315,11 @@ namespace Eve
 	    {
 	        ValidateResourceName(resourceName);
 
-			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, null);
+			HttpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, null);
 
-			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+		    return await ParseJsonAsListOf<T>(HttpResponse.Content);
 		}
 
 	    /// <summary>
@@ -335,11 +335,11 @@ namespace Eve
 	    {
 	        ValidateResourceName(resourceName);
 
-			_httpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, rawQuery);
+			HttpResponse = await GetAsync (resourceName, null, ifModifiedSince, softDeleted, rawQuery);
 
-			if (_httpResponse.StatusCode != HttpStatusCode.OK)
+			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(List<T>);
-		    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+		    return await ParseJsonAsListOf<T>(HttpResponse.Content);
 		}
 
 		/// <summary>
@@ -378,8 +378,8 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				Settings (client);
-				_httpResponse = await client.PostAsync (resourceName, SerializeObject (obj)).ConfigureAwait(false);
-				return _httpResponse;
+				HttpResponse = await client.PostAsync (resourceName, SerializeObject (obj)).ConfigureAwait(false);
+				return HttpResponse;
 			}
 		}
 
@@ -403,11 +403,11 @@ namespace Eve
 		/// <typeparam name="T">Type of the document.</typeparam>
 		public async Task<T> PostAsync<T> (string resourceName, object obj)
 		{
-			_httpResponse = await PostAsync (resourceName, obj).ConfigureAwait(continueOnCapturedContext:false);
+			HttpResponse = await PostAsync (resourceName, obj).ConfigureAwait(continueOnCapturedContext:false);
 
-			switch (_httpResponse.StatusCode) {
+			switch (HttpResponse.StatusCode) {
 			case HttpStatusCode.Created:
-				var s = await _httpResponse.Content.ReadAsStringAsync ();
+				var s = await HttpResponse.Content.ReadAsStringAsync ();
 				T instance = JsonConvert.DeserializeObject<T> (s);
 				return instance;
 			default:
@@ -451,11 +451,11 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				Settings (client);
-				_httpResponse = await client.PostAsync (resourceName, SerializeObject (objs)).ConfigureAwait(false);
+				HttpResponse = await client.PostAsync (resourceName, SerializeObject (objs)).ConfigureAwait(false);
 
-				if (_httpResponse.StatusCode != HttpStatusCode.Created)
+				if (HttpResponse.StatusCode != HttpStatusCode.Created)
 					return default(List<T>);
-			    return await ParseJsonAsListOf<T>(_httpResponse.Content);
+			    return await ParseJsonAsListOf<T>(HttpResponse.Content);
 			}
 		}
 
@@ -498,8 +498,8 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				SettingsForEditing (client, obj);
-				_httpResponse = await client.PutAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj)), SerializeObject (obj)).ConfigureAwait(false);
-				return _httpResponse;
+				HttpResponse = await client.PutAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj)), SerializeObject (obj)).ConfigureAwait(false);
+				return HttpResponse;
 			}
 		}
 
@@ -522,11 +522,11 @@ namespace Eve
 		/// <typeparam name="T">Type of the document.</typeparam>
 		public async Task<T> PutAsync<T> (string resourceName, object obj)
 		{
-			_httpResponse = await PutAsync (resourceName, obj);
+			HttpResponse = await PutAsync (resourceName, obj);
 
-			switch (_httpResponse.StatusCode) {
+			switch (HttpResponse.StatusCode) {
 			case HttpStatusCode.OK:
-				var s = await _httpResponse.Content.ReadAsStringAsync ();
+				var s = await HttpResponse.Content.ReadAsStringAsync ();
 				var instance = JsonConvert.DeserializeObject<T> (s);
 				return instance;
 			default:
@@ -572,8 +572,8 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				SettingsForEditing (client, obj);
-				_httpResponse = await client.DeleteAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj))).ConfigureAwait(false);
-				return _httpResponse;
+				HttpResponse = await client.DeleteAsync (string.Format ("{0}/{1}", resourceName, GetDocumentId (obj))).ConfigureAwait(false);
+				return HttpResponse;
 			}
 		}
 
@@ -585,8 +585,8 @@ namespace Eve
 		public async Task<HttpResponseMessage> DeleteAsync (object obj)
 		{
 			ValidateResourceName ();
-			_httpResponse = await DeleteAsync (ResourceName, obj);
-			return _httpResponse;
+			HttpResponse = await DeleteAsync (ResourceName, obj);
+			return HttpResponse;
 		}
 
 		/// <summary>
@@ -601,8 +601,8 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				Settings(client);
-				_httpResponse = await client.DeleteAsync (ResourceName).ConfigureAwait(false);
-				return _httpResponse;
+				HttpResponse = await client.DeleteAsync (ResourceName).ConfigureAwait(false);
+				return HttpResponse;
 			}
 		}
 
@@ -624,8 +624,8 @@ namespace Eve
 
 			using (var client = new HttpClient ()) {
 				Settings(client);
-				_httpResponse = await client.DeleteAsync (resourceName).ConfigureAwait(false);
-				return _httpResponse;
+				HttpResponse = await client.DeleteAsync (resourceName).ConfigureAwait(false);
+				return HttpResponse;
 			}
 		}
 
@@ -652,17 +652,17 @@ namespace Eve
 		/// <remarks>Used in conjuction with BaseAddress and ResourceName to construct the document endpoint.</remarks>
 		public string DocumentId { get; set; }
 
-		/// <summary>
-		/// Represents a HTTP response message.
-		/// </summary>
-		/// <value>The http response.</value>
-		public HttpResponseMessage HttpResponse{ get { return _httpResponse; } }
+        /// <summary>
+        /// Represents a HTTP response message.
+        /// </summary>
+        /// <value>The http response.</value>
+        public HttpResponseMessage HttpResponse { get; private set; }
 
-		/// <summary>
-		/// Gets or sets the authenticator.
-		/// </summary>
-		/// <value>The authenticator.</value>
-		public IAuthenticator Authenticator { get; set; }
+        /// <summary>
+        /// Gets or sets the authenticator.
+        /// </summary>
+        /// <value>The authenticator.</value>
+        public IAuthenticator Authenticator { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the LastUpdated field.
@@ -673,6 +673,10 @@ namespace Eve
 		/// Gets or sets the name of the Deleted field.
 		/// </summary>
 		public string DeletedField { get; set; }
+        /// <summary>
+        /// Gets or set the custom headers to be included with the request.
+        /// </summary>
+        public Dictionary<string, string> CustomHeaders { get; set; }
 		#endregion
 
 		#region "S U P P O R T"
@@ -690,6 +694,10 @@ namespace Eve
 			if (Authenticator != null) {
 				client.DefaultRequestHeaders.Authorization = Authenticator.AuthenticationHeader ();
 			}
+            foreach (var header in CustomHeaders)
+            {
+                client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+            }
 
 		}
 
