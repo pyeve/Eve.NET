@@ -91,7 +91,10 @@ namespace Eve
 
                 var queryPart = @rawQuery ?? "{}";
 
-			    q.Append(string.Format(@"?where={{""$and"": [{0}, {1}]}}", imsPart, queryPart));
+                if (imsPart != "{}" || queryPart != "{}")
+                {
+			        q.Append(string.Format(@"?where={{""$and"": [{0}, {1}]}}", imsPart, queryPart));
+                }
 
 			    if (showDeleted) q.Append(@"&show_deleted");
 

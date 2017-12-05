@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v0.3.2.0
+========
+
+- Fix: do not add a query string unless it is needed.
+
 v0.3.1.0
 ========
 
