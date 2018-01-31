@@ -135,16 +135,10 @@ public abstract class BaseClass
     public DateTime Created { get; set; }
 }
 
-// In both JSON and MongoDB it is common and good practice to adopt short field
-// names so we map those to our streamlined class properties.
-public class Company : BaseClass
-{
-    [JsonProperty("n")]
-    public string Name { get; set; }
-
-    [JsonProperty("p")]
-    public string Password { get; set; }
-}
+By default, snake_case conversion will be adopted when (de)serializing classes to json. 
+For example, `MyClass.ThisIsAProperty` will be serialized to `this_is_a_property` in 
+the json. If you want to change this behaviour, set the `ContractResolver` property 
+accordingly.
 ```
 ### Raw GET Requests
 ```C#

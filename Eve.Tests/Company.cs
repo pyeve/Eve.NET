@@ -13,9 +13,8 @@ namespace Eve.Tests
         /// Gets or sets the company name.
         /// </summary>
         /// <value>The company name.</value>
-        [JsonProperty("n")]
         public string Name { get; set; }
-        [JsonProperty("p")]
         public string Password { get; set; }
+        public string StateOrProvince { get; set; }
     }
 }

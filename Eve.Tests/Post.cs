@@ -16,7 +16,7 @@ namespace Eve.Tests
         public void DerivedInit()
         {
             Init();
-            Original = new Company {Name = "Name"};
+            Original = new Company {Name = "Name", Password="pw", StateOrProvince="state"};
         }
 
         [Test]
@@ -82,8 +82,8 @@ namespace Eve.Tests
         [Test]
         public async Task BulkPost()
         {
-			var c1 = new Company {Name = "c1"};
-			var c2 = new Company {Name = "c2"};
+			var c1 = new Company {Name = "c1", Password ="pw1", StateOrProvince="state1"};
+			var c2 = new Company {Name = "c2", Password="pw2", StateOrProvince="state2"};
             var objs = new List<Company> { c1, c2 };
 
             var retObjs = await EveClient.PostAsync(Endpoint, objs);

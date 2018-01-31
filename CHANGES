@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v0.4.0.0
+========
+
+- New: ContractResolver property. The default EveContractResolver uses snake case 
+  (ThisIsAProperty <=> this_is_a_property) when convering to/from json.
+
 v0.3.2.0
 ========
 

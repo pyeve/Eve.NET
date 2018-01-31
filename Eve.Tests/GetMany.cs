@@ -90,7 +90,7 @@ namespace Eve.Tests
         {
             System.Threading.Thread.Sleep(1000);
 
-            var rawQuery = @"{""n"": ""Name2""}";
+            var rawQuery = @"{""name"": ""Name2""}";
             var result = EveClient.GetAsync<Company>(Endpoint, null, rawQuery: rawQuery).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
             Assert.AreEqual(result.Count, 1);
@@ -98,7 +98,7 @@ namespace Eve.Tests
             var original3 = EveClient.PostAsync<Company>(Endpoint, new Company { Name = "Name3" }).Result;
             Assert.AreEqual(HttpStatusCode.Created, EveClient.HttpResponse.StatusCode);
 
-            rawQuery = @"{""n"": ""Name3""}";
+            rawQuery = @"{""name"": ""Name3""}";
             result = EveClient.GetAsync<Company>(Endpoint, null, rawQuery: rawQuery).Result;
             Assert.AreEqual(HttpStatusCode.OK, EveClient.HttpResponse.StatusCode);
             Assert.AreEqual(result.Count, 1);

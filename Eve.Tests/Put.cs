@@ -17,7 +17,7 @@ namespace Eve.Tests
             Init();
 
             // POST in order to get a valid ETag
-            Original = EveClient.PostAsync<Company>(Endpoint, new Company { Name = "Name" }).Result;
+            Original = EveClient.PostAsync<Company>(Endpoint, new Company { Name = "Name", StateOrProvince="state" }).Result;
             Assert.AreEqual(HttpStatusCode.Created, EveClient.HttpResponse.StatusCode);
 
             Original.Name = "Another Name";

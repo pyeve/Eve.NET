@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Eve.Authenticators;
 using System.Reflection;
+using Newtonsoft.Json.Serialization;
 
 namespace Eve
 {
@@ -28,6 +29,7 @@ namespace Eve
 			LastUpdatedField = "_updated";
 		    DeletedField = "_deleted";
             CustomHeaders = new Dictionary<string, string>();
+            ContractResolver = new EveContractResolver() { NamingStrategy = new SnakeCaseNamingStrategy() };
 		}
 
 		public EveClient (Uri baseAddress) : this ()
@@ -153,9 +155,7 @@ namespace Eve
 
 			if (HttpResponse.StatusCode != HttpStatusCode.OK)
 				return default(T);
-			var json = await HttpResponse.Content.ReadAsStringAsync ();
-			var obj = JsonConvert.DeserializeObject<T> (json);
-			return obj;
+            return await DeserializeObject<T>(HttpResponse);
 		}
 
 		/// <summary>
@@ -410,9 +410,7 @@ namespace Eve
 
 			switch (HttpResponse.StatusCode) {
 			case HttpStatusCode.Created:
-				var s = await HttpResponse.Content.ReadAsStringAsync ();
-				T instance = JsonConvert.DeserializeObject<T> (s);
-				return instance;
+				return await DeserializeObject<T>(HttpResponse);
 			default:
 				return default(T);
 			}
@@ -529,9 +527,7 @@ namespace Eve
 
 			switch (HttpResponse.StatusCode) {
 			case HttpStatusCode.OK:
-				var s = await HttpResponse.Content.ReadAsStringAsync ();
-				var instance = JsonConvert.DeserializeObject<T> (s);
-				return instance;
+				return await DeserializeObject<T>(HttpResponse);
 			default:
 				return default(T);
 			}
@@ -738,6 +734,13 @@ namespace Eve
 			content.Headers.ContentType = new MediaTypeHeaderValue ("application/json");
 			return content;
 		}
+        private async static Task<T> DeserializeObject<T>(HttpResponseMessage response)
+        {
+            var s = await response.Content.ReadAsStringAsync ();
+            var settings = new JsonSerializerSettings() { ContractResolver = ContractResolver };
+            T instance = JsonConvert.DeserializeObject<T> (s, settings);
+            return instance;
+        }
 
 		/// <summary>
 		/// Returns the document identifier by which the document is known on the service.
@@ -825,8 +828,16 @@ namespace Eve
 	    {
 			var json = await content.ReadAsStringAsync ();
 			var jo = JObject.Parse (json);
-			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None));
+            var settings = new JsonSerializerSettings() { ContractResolver = ContractResolver };
+			return JsonConvert.DeserializeObject<List<T>> (jo.Property ("_items").Value.ToString (Formatting.None), settings);
 	    }
 	    public void Dispose() { }
+        /// <summary>
+        /// Gets or sets the contract resolver.
+        /// </summary>
+        /// <value>
+        /// The contract resolver.
+        /// </value>
+        public static EveContractResolver ContractResolver { get; set; }
 	}
 }

@@ -59,6 +59,7 @@ namespace Eve.Tests
 			Assert.AreEqual (original.Updated, result.Updated);
 			Assert.AreEqual (original.Name, result.Name);
 			Assert.AreEqual (original.Password, result.Password);
+			Assert.AreEqual (original.StateOrProvince, result.StateOrProvince);
 		}
 
 		/// <summary>
@@ -69,7 +70,7 @@ namespace Eve.Tests
 		public void ValidateReturnedHttpResponse (HttpResponseMessage responseMessage, Company original)
 		{
 			var s = responseMessage.Content.ReadAsStringAsync ().Result;
-			var c = JsonConvert.DeserializeObject<Company> (s);
+			var c = JsonConvert.DeserializeObject<Company> (s, new JsonSerializerSettings { ContractResolver= EveClient.ContractResolver });
 			ValidateReturnedObject (c, original);
 		}
 
@@ -87,6 +88,8 @@ namespace Eve.Tests
 			Assert.IsNotNullOrEmpty (obj.UniqueId);
 			Assert.IsNotNullOrEmpty (obj.ETag);
 			Assert.AreEqual (obj.Name, original.Name);
+			Assert.AreEqual (obj.Password, original.Password);
+			Assert.AreEqual (obj.StateOrProvince, original.StateOrProvince);
 		}
 	}
 }
