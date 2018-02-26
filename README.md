@@ -16,7 +16,7 @@ Usage
 ```C#
 // Simplest initialization possible.
 var client = new EveClient();
-client.BaseAddess = new Uri("http://api.com");
+client.BaseAddress = new Uri("http://api.com");
 
 // or
 var client = new EveClient { BaseAddress = new Uri("http://api.com") };
