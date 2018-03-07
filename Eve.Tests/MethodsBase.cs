@@ -35,7 +35,7 @@ namespace Eve.Tests
             // very limited resources (for free), and we want everyone to keep enjoying it. To hit
             // the remote test server simply set 'EveTestServer' envvar to "http://evenet-testbed.herokuapp.com";
 
-            Service = Environment.GetEnvironmentVariable("EveTestServer") ?? "http://10.0.2.2:5000";
+            Service = Environment.GetEnvironmentVariable("EveTestServer") ?? "http://127.0.0.1:5000";
 
 			// Make sure remote remote endpoint is completely empty.
 			// We use the standard HttpClient for this (we aren't testing anything yet).
