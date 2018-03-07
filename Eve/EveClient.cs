@@ -81,26 +81,38 @@ namespace Eve
 					client.DefaultRequestHeaders.TryAddWithoutValidation ("If-None-Match", etag);
 				}
 
-				var q = new System.Text.StringBuilder (uri);
+                var q = new System.Text.StringBuilder();
+                if (ifModifiedSince != null)
+                    q.AppendFormat(
+                        @"{{""{0}"": {{""$gt"": ""{1}""}}}}",
+                        LastUpdatedField,
+                        ((DateTime)ifModifiedSince).ToString("r"));
+                // do the query filtering
+                if (rawQuery != null)
+                    if (q.Length > 0)
+                    {
+                        q.Insert(0, @"{""$and"": [");
+                        q.AppendFormat(@", {0}]}}", @rawQuery);
+                    }
+                    else
+                        q.AppendFormat(@"{0}", @rawQuery);
+                if (q.Length > 0)
+                    q.Insert(0, "where=");
 
-				// TODO don't add ims and query parts if arguments are null? Works this way, but
-				// there's probably an unneeded impact on performance (and complexity).
-			    var imsPart = 
-                    ifModifiedSince == null ? 
-                        "{}" : 
-                        string.Format (@"{{""{0}"": {{""$gt"": ""{1}""}}}}", LastUpdatedField, 
-                            ((DateTime)ifModifiedSince).ToString ("r"));
-
-                var queryPart = @rawQuery ?? "{}";
-
-                if (imsPart != "{}" || queryPart != "{}")
+                // append other stuff
+                if (showDeleted)
                 {
-			        q.Append(string.Format(@"?where={{""$and"": [{0}, {1}]}}", imsPart, queryPart));
+                    if (q.Length > 0)
+                        q.Append('&');
+                    q.Append("show_deleted");
                 }
 
-			    if (showDeleted) q.Append(@"&show_deleted");
+                // prepend the url
+                if (q.Length > 0)
+                    q.Insert(0, '?');
+                q.Insert(0, uri);
 
-			    HttpResponse = await client.GetAsync(q.ToString()).ConfigureAwait(false);
+                HttpResponse = await client.GetAsync(q.ToString()).ConfigureAwait(false);
 				return HttpResponse;
 			}
 		}
