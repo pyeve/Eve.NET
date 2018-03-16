@@ -1,8 +1,15 @@
 Changelog
 =========
 
+In development
+==============
+
+- Refactor: don't add ims and query parts if arguments are null (Pedro Rodrigues)
+
 v0.4.0.0
 ========
+
+Released on Jan 31, 2018.
 
 - New: ContractResolver property. The default EveContractResolver uses snake case 
   (ThisIsAProperty <=> this_is_a_property) when convering to/from json.
