@@ -4,7 +4,8 @@ Changelog
 In development
 ==============
 
-- Refactor: don't add ims and query parts if arguments are null (Pedro Rodrigues)
+- Fix: README typo (Nikos Kanakaris).
+- Refactor: don't add ims and query parts if arguments are null (Pedro Rodrigues):
 
 v0.4.0.0
 ========
