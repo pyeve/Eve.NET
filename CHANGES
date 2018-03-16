@@ -4,6 +4,7 @@ Changelog
 In development
 ==============
 
+- Delete the now obsolete .nupkg folder.
 - Fix: README typo (Nikos Kanakaris).
 - Refactor: use partial classes for increased readability (Pedro Rordirgues).
 - Refactor: don't add ims and query parts if arguments are null (Pedro Rodrigues).
