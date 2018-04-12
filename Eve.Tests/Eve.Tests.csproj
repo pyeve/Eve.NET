@@ -74,6 +74,7 @@
     <Compile Include="BasicAuthenticator.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="Delete.cs" />
+    <Compile Include="Get.cs" />
     <Compile Include="GetSingle.cs" />
     <Compile Include="GetMany.cs" />
     <Compile Include="Post.cs" />
