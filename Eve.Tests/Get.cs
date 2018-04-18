@@ -12,9 +12,20 @@ namespace Eve.Tests
     class Fluent
     {
         [Test]
-        public void IfModifiedSince()
+        public void GetMany()
         {
-            var r = Get<Company>().Where(x => x.Name == "ciao" && x.ETag == "tag");
+            var date = DateTime.Now;
+            var challenge = Get<Company>()
+                .Where(x => (x.StateOrProvince != "tag" || x.Name == "nik") && x.Password == "pw")
+                .IfModifiedSince(date)
+                .IncludeDeleted()
+                .BuildQuery();
+
+            Assert.AreEqual(
+                //$"{{$or: [{{\"state_or_province\": {{\"$ne\":\"tag\"}}}}, {{\"name\": \"nik\"}}], \"password\": \"pw\"}}",
+                //$"{{$or: [{{\"state_or_province\": {{\"$ne\":\"tag\"}}}}, {{\"name\": \"nik\"}}], \"password\": \"pw\", \"_updated\": \"{date.ToString("r")}\"}}",
+                $"{{$or: [{{\"state_or_province\": {{\"$ne\":\"tag\"}}}}, {{\"name\": \"nik\"}}], \"password\": \"pw\", \"_updated\": \"{date.ToString("r")}\"}}?show_deleted",
+                challenge);
         }
     }
 }
