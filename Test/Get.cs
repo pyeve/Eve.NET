@@ -1,17 +1,13 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Eve.EC;
 
 namespace Eve.Tests
 {
-    [TestFixture]
-    class Fluent
+    [TestClass]
+    public class Fluent
     {
-        [Test]
+        [TestMethod]
         public void GetMany()
         {
             var date = DateTime.Now;

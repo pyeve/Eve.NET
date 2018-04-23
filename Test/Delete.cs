@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using System.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Eve.Tests
 {
 	/// <summary>
 	/// Test that DELETE requests to document endpoints are properly executed.
 	/// </summary>
-	[TestFixture]
-	class Delete : MethodsBase
+	[TestClass]
+	public class Delete : MethodsBase
 	{
-		[SetUp]
+		[TestInitialize]
 		public void DerivedInit ()
 		{
 			Init ();
@@ -21,7 +21,7 @@ namespace Eve.Tests
 			Assert.AreEqual (HttpStatusCode.Created, EveClient.HttpResponse.StatusCode);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AcceptEndpointAndObject ()
 		{
 			var message = EveClient.DeleteAsync (Endpoint, Original).Result;
@@ -32,7 +32,7 @@ namespace Eve.Tests
 			Assert.AreEqual (HttpStatusCode.NotFound, message.StatusCode);
 		}
 
-		[Test]
+		[TestMethod]
 		public void AcceptObject ()
 		{
 			EveClient.ResourceName = Endpoint;
@@ -44,7 +44,7 @@ namespace Eve.Tests
 			Assert.AreEqual (HttpStatusCode.NotFound, message.StatusCode);
 		}
 
-		[Test]
+		[TestMethod]
 		public void DeleteEndpointContent ()
 		{
 			var message = EveClient.DeleteAsync (Endpoint).Result;
@@ -55,7 +55,7 @@ namespace Eve.Tests
 			Assert.AreEqual (HttpStatusCode.NoContent, message.StatusCode);
 			Assert.AreEqual (0, companies.Count);
 		}
-		[Test]
+		[TestMethod]
 		public void DeleteEndpointContentUsingResourceName ()
 		{
 			EveClient.ResourceName = Endpoint;
@@ -68,49 +68,69 @@ namespace Eve.Tests
 			Assert.AreEqual (0, companies.Count);
 		}
 
-		[Test]
-		[ExpectedException (typeof(ArgumentNullException), ExpectedMessage = "BaseAddress", MatchType = MessageMatch.Contains)]
+		[TestMethod]
 		public async Task BaseAddressPropertyNullException ()
 		{
 			EveClient.BaseAddress = null;
-			await EveClient.DeleteAsync ("resource", Original);
+
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async ()=>
+            {
+                await EveClient.DeleteAsync("resource", Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("BaseAddress"));
 		}
 
-		[Test]
-		[ExpectedException (typeof(ArgumentNullException), ExpectedMessage = "BaseAddress", MatchType = MessageMatch.Contains)]
+		[TestMethod]
 		public async Task BaseAddressPropertyNullExceptionAlt ()
 		{
 			EveClient.BaseAddress = null;
 			EveClient.ResourceName = "resource";
-			await EveClient.DeleteAsync (Original);
+
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+               await EveClient.DeleteAsync(Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("BaseAddress"));
 		}
 
-		[Test]
-		[ExpectedException (typeof(ArgumentNullException), ExpectedMessage = "resourceName", MatchType = MessageMatch.Contains)]
+		[TestMethod]
 		public async Task ResourceArgumentNameNullException ()
 		{
-			await EveClient.DeleteAsync (null, Original);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.DeleteAsync(null, Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
 		}
 
-		[Test]
-		[ExpectedException (typeof(ArgumentException), ExpectedMessage = "resourceName", MatchType = MessageMatch.Contains)]
+		[TestMethod]
 		public async Task ResourceNameArgumentException ()
 		{
-			await EveClient.DeleteAsync (string.Empty, Original);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+            {
+                await EveClient.DeleteAsync(string.Empty, Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
 		}
 
-		[Test]
-		[ExpectedException (typeof(ArgumentNullException), ExpectedMessage = "obj", MatchType = MessageMatch.Contains)]
+		[TestMethod]
 		public async Task ObjArgumentNullException ()
 		{
-			await EveClient.DeleteAsync ("resource", null);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.DeleteAsync("resource", null);
+            });
+            Assert.IsTrue(ex.Message.Contains("obj"));
 		}
 
-		[Test]
-		[ExpectedException (typeof(ArgumentNullException), ExpectedMessage = "ResourceName", MatchType = MessageMatch.Contains)]
+		[TestMethod]
 		public async Task ResourceNamePropertyNullException ()
 		{
-			await EveClient.DeleteAsync (Original);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.DeleteAsync(Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("ResourceName"));
 		}
 	}
 }

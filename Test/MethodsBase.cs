@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using NUnit.Framework;
 
 namespace Eve.Tests
 {
@@ -14,7 +14,7 @@ namespace Eve.Tests
 		internal Company Original;
         internal string Service;
 
-		[SetUp]
+		[TestInitialize]
 		public void Init ()
 		{
             // In order to run the test suite you need an instance of Eve.NET-testbed running.
@@ -83,10 +83,12 @@ namespace Eve.Tests
 		public void ValidateReturnedObject (Company obj, Company original)
 		{
 			Assert.IsNotNull (obj);
-			Assert.IsInstanceOf<DateTime> (obj.Created);
-			Assert.IsInstanceOf<DateTime> (obj.Updated);
-			Assert.IsNotNullOrEmpty (obj.UniqueId);
-			Assert.IsNotNullOrEmpty (obj.ETag);
+			Assert.IsInstanceOfType(obj.Created, typeof(DateTime));
+			Assert.IsInstanceOfType(obj.Updated, typeof(DateTime));
+			Assert.IsNotNull (obj.UniqueId);
+            Assert.AreNotEqual(string.Empty, obj.UniqueId);
+			Assert.IsNotNull (obj.ETag);
+            Assert.AreNotEqual(string.Empty, obj.ETag);
 			Assert.AreEqual (obj.Name, original.Name);
 			Assert.AreEqual (obj.Password, original.Password);
 			Assert.AreEqual (obj.StateOrProvince, original.StateOrProvince);

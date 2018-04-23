@@ -1,11 +1,11 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Eve.Tests
 {
-    [TestFixture]
-    class BasicAuthenticator
+    [TestClass]
+    public class BasicAuthenticator
     {
-        [Test] 
+        [TestMethod] 
         public void BasicAuthenticatorDefaults() { 
             var ba = new Authenticators.BasicAuthenticator("user", "pw");
             Assert.AreEqual(ba.UserName, "user"); 

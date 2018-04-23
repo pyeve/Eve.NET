@@ -1,19 +1,19 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Net;
 using System.Threading.Tasks;
-using NUnit.Framework;
 
 namespace Eve.Tests
 {
     /// <summary>
     ///  Test that GET requests to resource endpoints are properly executed.
     /// </summary>
-    [TestFixture]
-    class GetMany : MethodsBase
+    [TestClass]
+    public class GetMany : MethodsBase
     {
         internal Company Original2;
 
-        [SetUp]
+        [TestInitialize]
         public void DerivedInit()
         {
             Init();
@@ -25,7 +25,7 @@ namespace Eve.Tests
             Assert.AreEqual(HttpStatusCode.Created, EveClient.HttpResponse.StatusCode);
         }
 
-        [Test]
+        [TestMethod]
         public void UseResourceName()
         {
             EveClient.ResourceName = Endpoint;
@@ -36,7 +36,7 @@ namespace Eve.Tests
             ValidateAreEquals(Original2, result[1]);
         }
 
-        [Test]
+        [TestMethod]
         public void UseResourceNameConsiderIms()
         {
             System.Threading.Thread.Sleep(1000);
@@ -56,7 +56,7 @@ namespace Eve.Tests
             ValidateAreEquals(original3, result[0]);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptEndpoint()
         {
             var result = EveClient.GetAsync<Company>(Endpoint).Result;
@@ -66,7 +66,7 @@ namespace Eve.Tests
             ValidateAreEquals(Original2, result[1]);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptEndpointConsiderIms()
         {
             System.Threading.Thread.Sleep(1000);
@@ -85,7 +85,7 @@ namespace Eve.Tests
             ValidateAreEquals(original3, result[0]);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptEndpointConsiderImsAndSoftDeleteAndQuery()
         {
             System.Threading.Thread.Sleep(1000);
@@ -121,26 +121,35 @@ namespace Eve.Tests
         }
 
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [TestMethod]
         public async Task BaseAddessNullException()
         {
             EveClient.BaseAddress = null;
-            await EveClient.GetAsync<Company>(Endpoint);
+
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.GetAsync<Company>(Endpoint);
+            });
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="resourceName", MatchType = MessageMatch.Contains)]
+        [TestMethod]
         public async Task ResourceNameNullException()
         {
-            await EveClient.GetAsync<Company>(resourceName:null);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.GetAsync<Company>(resourceName: null);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage="resourceName", MatchType = MessageMatch.Contains)]
+        [TestMethod]
         public async Task ResourceNameArgumentException()
         {
-            await EveClient.GetAsync<Company>(string.Empty);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+            {
+                await EveClient.GetAsync<Company>(string.Empty);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
         }
     }
 }

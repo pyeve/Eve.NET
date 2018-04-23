@@ -4,6 +4,7 @@ Changelog
 In development
 ==============
 
+- Switch to NETCore/MSTest test project.
 - Delete the now obsolete .nupkg folder.
 - Fix: README typo (Nikos Kanakaris).
 - Refactor: use partial classes for increased readability (Pedro Rordirgues).

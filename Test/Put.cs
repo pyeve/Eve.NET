@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using System.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Eve.Tests
 {
     /// <summary>
     /// Test that PUT requests to resource endpoints are properly executed.
     /// </summary>
-    [TestFixture]
-    class Put : MethodsBase
+    [TestClass]
+    public class Put : MethodsBase
     {
-         [SetUp]
+         [TestInitialize]
         public void DerivedInit()
         {
             Init();
@@ -23,7 +23,7 @@ namespace Eve.Tests
             Original.Name = "Another Name";
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptEndpointAndObject()
         {
             var result = EveClient.PutAsync<Company>(Endpoint, Original).Result;
@@ -31,7 +31,7 @@ namespace Eve.Tests
             ValidateReturnedObject(result, Original);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptObject()
         {
             EveClient.ResourceName = Endpoint;
@@ -40,7 +40,7 @@ namespace Eve.Tests
             ValidateReturnedObject(result, Original);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptEndpointAndObjectReturnHttpResponse()
         {
             var message = EveClient.PutAsync(Endpoint, Original).Result;
@@ -48,7 +48,7 @@ namespace Eve.Tests
             ValidateReturnedHttpResponse(message, Original);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptObjectReturnHttpResponse()
         {
             EveClient.ResourceName = Endpoint;
@@ -57,33 +57,46 @@ namespace Eve.Tests
             ValidateReturnedHttpResponse(message, Original);
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="BaseAddress",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task BaseAddressPropertyNullException()
         {
             EveClient.BaseAddress = null;
-            await EveClient.PutAsync("resource", Original);
+
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.PutAsync("resource", Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("BaseAddress"));
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="resourceName",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task ResourceNameArgumentNullException()
         {
-            await EveClient.PutAsync(null, Original);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.PutAsync(null, Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage="resourceName",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task ResourceNameArgumentException()
         {
-            await EveClient.PutAsync(string.Empty, Original);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+            {
+                await EveClient.PutAsync(string.Empty, Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="obj",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task ObjArgumentNullException()
         {
-            await EveClient.PutAsync("resource", null);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.PutAsync("resource", null);
+            });
+            Assert.IsTrue(ex.Message.Contains("obj"));
         }
     }
 }

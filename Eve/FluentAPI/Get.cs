@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 
 [assembly:InternalsVisibleTo("Eve.Tests")]
+[assembly:InternalsVisibleTo("Test")]
 
 namespace Eve
 {

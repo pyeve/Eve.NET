@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using System.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Eve.Tests
 {
     /// <summary>
     /// Test that POST requests to resource endpoints are properly executed.
     /// </summary>
-    [TestFixture]
-    class Post : MethodsBase
+    [TestClass]
+    public class Post : MethodsBase
     {
-         [SetUp]
+         [TestInitialize]
         public void DerivedInit()
         {
             Init();
             Original = new Company {Name = "Name", Password="pw", StateOrProvince="state"};
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptEndpointAndObject()
         {
             var result = EveClient.PostAsync<Company>(Endpoint, Original).Result;
@@ -27,7 +27,7 @@ namespace Eve.Tests
             ValidateReturnedObject(result, Original);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptObject()
         {
             EveClient.ResourceName = Endpoint;
@@ -36,14 +36,14 @@ namespace Eve.Tests
             ValidateReturnedObject(result, Original);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptEndpointAndObjectReturnHttpResponse()
         {
             var message = EveClient.PostAsync(Endpoint, Original).Result;
             ValidateReturnedHttpResponse(message, Original);
         }
 
-        [Test]
+        [TestMethod]
         public void AcceptObjectReturnHttpResponse()
         {
             EveClient.ResourceName = Endpoint;
@@ -51,35 +51,48 @@ namespace Eve.Tests
             ValidateReturnedHttpResponse(message, Original);
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="BaseAddress",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task BaseAddressPropertyNullException()
         {
             EveClient.BaseAddress = null;
-            await EveClient.PostAsync("resource", Original);
+
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.PostAsync("resource", Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("BaseAddress"));
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="resourceName",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task ResourceNameArgumentNullException()
         {
-            await EveClient.PostAsync(null, Original);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.PostAsync(null, Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage="resourceName",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task ResourceNameArgumentException()
         {
-            await EveClient.PostAsync(string.Empty, Original);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentException>(async () =>
+            {
+                await EveClient.PostAsync(string.Empty, Original);
+            });
+            Assert.IsTrue(ex.Message.Contains("resourceName"));
         }
 
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException), ExpectedMessage="obj",MatchType= MessageMatch.Contains)]
+        [TestMethod]
         public async Task ObjArgumentNullException()
         {
-            await EveClient.PostAsync("resource", null);
+            var ex = await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+            {
+                await EveClient.PostAsync("resource", null);
+            });
+            Assert.IsTrue(ex.Message.Contains("obj"));
         }
-        [Test]
+        [TestMethod]
         public async Task BulkPost()
         {
 			var c1 = new Company {Name = "c1", Password ="pw1", StateOrProvince="state1"};
@@ -88,11 +101,11 @@ namespace Eve.Tests
 
             var retObjs = await EveClient.PostAsync(Endpoint, objs);
 
-            Assert.That(retObjs.Count, Is.EqualTo(2));
+            Assert.AreEqual(2, retObjs.Count);
             ValidateReturnedObject(retObjs[0], c1);
             ValidateReturnedObject(retObjs[1], c2);
         }
-        [Test]
+        [TestMethod]
         public async Task BulkPostValidationException()
         {
 			var c1 = new Company();
@@ -101,7 +114,7 @@ namespace Eve.Tests
 
             var retObjs = await EveClient.PostAsync(Endpoint, objs);
 
-            Assert.That(retObjs, Is.Null);
+            Assert.IsNull(retObjs);
         }
     }
 }
